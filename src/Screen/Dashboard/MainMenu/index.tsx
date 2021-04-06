@@ -2,7 +2,7 @@ import React from 'react';
 import {FC} from 'react';
 // import your screen here.......
 import {Tabscreen} from '../TabScreen';
-import {ProductScreen} from '../Product/Product.screen'
+import {ProductStackScreen} from '../Product'
 
 
 import {DashboardParam} from '../../../Redux/Model';
@@ -15,7 +15,7 @@ export const MainMenuScreen: FC = () => {
   return (
     <Menu.Navigator initialRouteName="MainMenu">
       <Menu.Screen name="MainMenu" component={Tabscreen} options={{headerShown:false}} />
-      <Menu.Screen name='Product' component={ProductScreen} />
+      <Menu.Screen name='Product' component={ProductStackScreen}  options={{headerShown:false}}/>
     </Menu.Navigator>
   );
 };

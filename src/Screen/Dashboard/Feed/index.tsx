@@ -19,7 +19,7 @@ export const FeedStackScreen: FC = () => {
         name="Feed"
         component={FeedScreen}
         options={{
-          title: 'PAGE !',
+          title: 'FEED!',
         }}
       />
     </Stack.Navigator>

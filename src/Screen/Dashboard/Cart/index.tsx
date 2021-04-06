@@ -5,7 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {CartScreen} from './Cart.screen';
 import {DashboardParam} from '../../../Redux/Model';
 
-export const Page1StackScreen: FC = () => {
+export const CartStackScreen: FC = () => {
   const Stack = createStackNavigator<DashboardParam>();
 
   return (
@@ -17,10 +17,10 @@ export const Page1StackScreen: FC = () => {
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen
-        name="Page1"
+        name="Cart"
         component={CartScreen}
         options={{
-          title: 'PAGE !',
+          title: 'TROLI',
         }}
       />
     </Stack.Navigator>

@@ -6,6 +6,7 @@ import {Page1StackScreen} from '../Page1';
 import {HomeStackScreen} from '../Home';
 import {UserStackScreen} from '../User';
 import{ FeedStackScreen} from '../Feed';
+import{ CartStackScreen} from '../Cart';
 
 import {View} from 'react-native';
 import {Text} from 'react-native';
@@ -47,7 +48,7 @@ export const Tabscreen: FC = () => {
       />
            <Tab.Screen
         name='Cart'
-        component={FeedStackScreen}
+        component={CartStackScreen}
         options={{title: 'Troli' ,tabBarIcon:({focused,color})=>(
           <Ionicons name={focused? "cart":'cart-outline'} color={color} size={26} />
         )}}
