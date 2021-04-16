@@ -17,6 +17,12 @@ export const ProductD: FC<TProps> = props => {
   const {width} = Dimensions.get('screen');
   let _image =
     'https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300';
+  const images= [
+    'https://source.unsplash.com/1024x768/?nature',
+    'https://source.unsplash.com/1024x768/?water',
+    'https://source.unsplash.com/1024x768/?girl',
+    'https://source.unsplash.com/1024x768/?tree', // Network image
+  ];
   let promoPrice = 500000;
   let normalPrice = 600000;
   return (
@@ -31,7 +37,7 @@ export const ProductD: FC<TProps> = props => {
             resizeMode: 'stretch',
           }}
         />
-        <Block width={0.88 * width} >
+        <Block width={0.88 * width}>
           <Text style={{fontSize: 14, paddingHorizontal: 2}}>
             {LimitText(
               'Kopi susu meseduh duaffg dsdsdsdsd ssdsdsdsd sdsdsdsds dsds dsdsdsds sdsdsdsd sdsdsdsds aaasasa dsdsd hh ng cangkir',
