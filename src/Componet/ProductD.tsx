@@ -1,9 +1,10 @@
 import React from 'react';
 import {FC} from 'react';
 import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
-import {Card, Block} from 'galio-framework';
+import {Card, Block, DeckSwiper} from 'galio-framework';
 import {Image} from 'react-native-elements';
 import {CurrencyFormat, LimitText} from '../Global';
+import {SlidingImage} from './SlidingImage';
 interface TProps {
   onPress?: () => void;
   backgroundColor?: string;
@@ -17,7 +18,7 @@ export const ProductD: FC<TProps> = props => {
   const {width} = Dimensions.get('screen');
   let _image =
     'https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300';
-  const images= [
+  const images = [
     'https://source.unsplash.com/1024x768/?nature',
     'https://source.unsplash.com/1024x768/?water',
     'https://source.unsplash.com/1024x768/?girl',
@@ -25,18 +26,12 @@ export const ProductD: FC<TProps> = props => {
   ];
   let promoPrice = 500000;
   let normalPrice = 600000;
+
   return (
     <Block fluid safe width={width}>
       <Block card center>
-        <Image
-          source={{uri: _image}}
-          style={{
-            width: 0.9 * width,
-            height: 0.6 * width,
-            margin: 2,
-            resizeMode: 'stretch',
-          }}
-        />
+        <SlidingImage images={images} />
+
         <Block width={0.88 * width}>
           <Text style={{fontSize: 14, paddingHorizontal: 2}}>
             {LimitText(
