@@ -20,10 +20,7 @@ export const ProductDetail: FC<Props> = ({navigation}) => {
   return (
     <View>
       <ProductD data={{katul:'ngacuh'}}/>
-      {/* <Text>Product Detail</Text>
-      <Button title="Logout" onPress={() => onlogout()} />
-      <Divider/>
-      <Button title="Chart" onPress={() => navigation.navigate('Cart')} /> */}
+ 
     </View>
   );
 };

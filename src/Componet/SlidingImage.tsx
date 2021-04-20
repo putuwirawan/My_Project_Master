@@ -1,14 +1,7 @@
 import React, {useState} from 'react';
 import {FC} from 'react';
-import {
-  Text,
-  View,
-  Image,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
-
+import {Text, View, Dimensions, StyleSheet} from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 interface TProps {
   images?: string[];
 }
@@ -19,30 +12,20 @@ export const SlidingImage: FC<TProps> = props => {
   const {images} = props;
   const [active, setActive] = useState(0);
 
-  const onChange = ({nativeEvent}: any) => {
-    const slide = Math.ceil(
-      nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width,
-    );
-    if (slide !== active) {
-      setActive(slide);
-    }
-  };
   return (
     <View style={styles.container}>
-      <ScrollView
-        horizontal
-        pagingEnabled
-        onScroll={onChange}
-        showsHorizontalScrollIndicator={false}
-        style={styles.scroll}>
-        {images
-          ? images.map((item, i) => {
-              return (
-                <Image key={i} source={{uri: item}} style={styles.image} />
-              );
-            })
-          : null}
-      </ScrollView>
+      <ImageViewer
+        style={styles.image}
+        onChange={i => {
+          if (i !== undefined) setActive(i);
+        }}
+        useNativeDriver={true}
+        backgroundColor="#626566"
+        imageUrls={
+          images ? images.map((item, i) => ({url: item})) : [{url: ''}]
+        }
+      />
+
       <View style={[styles.pagination]}>
         {images
           ? images.map((i, x) => (
@@ -70,5 +53,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   pagingText: {fontSize: width / 25, color: '#9C9C9C', margin: 3},
-  pagingActiveText: {fontSize: width / 25, color: '#DFE453', margin: 3},
+  pagingActiveText: {fontSize: width / 25, color: '#ED1E25', margin: 3},
 });
