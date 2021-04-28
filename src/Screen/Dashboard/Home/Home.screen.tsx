@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FC, useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {View, Text, Button, ScrollView} from 'react-native';
@@ -18,6 +18,7 @@ import {
   ProductM,
 } from '../../../Componet';
 import {Block} from 'galio-framework';
+import {getCatalog} from '../../../Global/API';
 
 const adidasLogo = require('../../../Assets/Images/adidas.png');
 const insghtLogo = require('../../../Assets/Images/insight.jpg');
@@ -26,6 +27,11 @@ type Props = StackScreenProps<DashboardParam, 'Home'>;
 export const HomeScreen: FC<Props> = ({navigation}) => {
   const dispatch = useDispatch(); // to Access Action
   const [textSearch, setSearch] = useState<string>('');
+  const [datas, setDatas] = useState([]);
+  const getDataCatalog = async () => {
+    const data = await getCatalog({flags: 1, sortOrder: 'DESC'});
+    setDatas(data);
+  };
   const onlogout = async () => {
     await clearLocalStorage();
     dispatch(logOut());
@@ -33,6 +39,9 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
   const updateSearch = (search: string) => {
     setSearch(search);
   };
+  useEffect(() => {
+    getDataCatalog();
+  }, []);
   return (
     <View style={[Styles.Container]}>
       <SafeAreaView style={{paddingVertical: 3, backgroundColor: '#5F6160'}}>
@@ -73,25 +82,44 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
           <View style={{height: 190}}>
             <Block safe>
               <ScrollView horizontal>
-                <ProductM
-                  data={{katul: 'ngacuh'}}
-                  promo={
-                    <Image
-                      source={require('../../../Assets/Images/freeOngkir.png')}
-                      style={{width: 30, height: 25, marginBottom: 5}}
+                {datas.map((item, i) => {
+                  return (
+                    <ProductM
+                      key={i}
+                      data={item}
+                      promo={
+                        <Image
+                          source={require('../../../Assets/Images/freeOngkir.png')}
+                          style={{width: 30, height: 25, marginBottom: 5}}
+                        />
+                      }
                     />
-                  }
-                />
-                <ProductM data={{katul: 'ngacuh'}} />
-                <ProductM data={{katul: 'ngacuh'}} />
-                <ProductM data={{katul: 'ngacuh'}} />
+                  );
+                })}
+
+      
               </ScrollView>
             </Block>
           </View>
           <View style={{height: 240, backgroundColor: 'blue'}}>
             <Block safe>
               <ScrollView horizontal>
-                <ProductL
+              {datas.map((item, i) => {
+                  return (
+                    <ProductL
+                      key={i}
+                      onPress={() => navigation.navigate('ProductDetail',{data:item})}
+                      data={item}
+                      promo={
+                        <Image
+                          source={require('../../../Assets/Images/freeOngkir.png')}
+                          style={{width: 30, height: 25, marginBottom: 5}}
+                        />
+                      }
+                    />
+                  );
+                })}
+                {/* <ProductL
                   onPress={() => navigation.navigate('ProductDetail')}
                   data={{katul: 'ngacuh'}}
                   promo={
@@ -103,7 +131,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
                 />
                 <ProductL data={{katul: 'ngacuh'}} />
                 <ProductL data={{katul: 'ngacuh'}} />
-                <ProductL data={{katul: 'ngacuh'}} />
+                <ProductL data={{katul: 'ngacuh'}} /> */}
               </ScrollView>
             </Block>
           </View>

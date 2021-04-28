@@ -4934,6 +4934,11 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
+json-function@^1.8.34:
+  version "1.8.34"
+  resolved "https://registry.yarnpkg.com/json-function/-/json-function-1.8.34.tgz#c324a70268d3f8a72a67c19993d7c392fb07d5b4"
+  integrity sha512-xhnmHGB6XUtNg3wjMS6KVzjZLzjlbKIWULJVRvJs6P7YZVeAcyV56NA4V/1Rs81fxGuaHBgrll/4ii/Ag+PIpQ==
+
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz#bb867cfb3450e69107c131d1c514bab3dc8bcaa9"
