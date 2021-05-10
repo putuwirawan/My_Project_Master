@@ -28,9 +28,10 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
   const dispatch = useDispatch(); // to Access Action
   const [textSearch, setSearch] = useState<string>('');
   const [datas, setDatas] = useState([]);
+
   const getDataCatalog = async () => {
     const data = await getCatalog({flags: 1, sortOrder: 'DESC'});
-    setDatas(data);
+    if (data !== null) setDatas(data);
   };
   const onlogout = async () => {
     await clearLocalStorage();
@@ -81,7 +82,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
         <ScrollView>
           <View style={{height: 190}}>
             <Block safe>
-              <ScrollView horizontal>
+              {/* <ScrollView horizontal>
                 {datas.map((item, i) => {
                   return (
                     <ProductM
@@ -95,30 +96,32 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
                       }
                     />
                   );
-                })}
-
-      
-              </ScrollView>
+                })}      
+              </ScrollView> */}
             </Block>
           </View>
           <View style={{height: 240, backgroundColor: 'blue'}}>
             <Block safe>
               <ScrollView horizontal>
-              {datas.map((item, i) => {
-                  return (
-                    <ProductL
-                      key={i}
-                      onPress={() => navigation.navigate('ProductDetail',{data:item})}
-                      data={item}
-                      promo={
-                        <Image
-                          source={require('../../../Assets/Images/freeOngkir.png')}
-                          style={{width: 30, height: 25, marginBottom: 5}}
+                {datas.length > 0
+                  ? datas.map((item, i) => {
+                      return (
+                        <ProductL
+                          key={i}
+                          onPress={() =>
+                            navigation.navigate('ProductDetail', {data: item})
+                          }
+                          data={item}
+                          promo={
+                            <Image
+                              source={require('../../../Assets/Images/freeOngkir.png')}
+                              style={{width: 30, height: 25, marginBottom: 5}}
+                            />
+                          }
                         />
-                      }
-                    />
-                  );
-                })}
+                      );
+                    })
+                  : null}
                 {/* <ProductL
                   onPress={() => navigation.navigate('ProductDetail')}
                   data={{katul: 'ngacuh'}}

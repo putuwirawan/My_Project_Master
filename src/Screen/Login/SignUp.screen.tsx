@@ -12,12 +12,7 @@ import {
 } from 'react-native';
 import {LogingModel, LoginParam, LoginState} from '../../Redux/Model';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  apiLogin,
-  clearLocalStorage,
-  saveLocalStorage,
-  Styles,
-} from '../../Global';
+import {clearLocalStorage, saveLocalStorage, Styles} from '../../Global';
 import {errorLoging, logIn} from '../../Redux/Actions/Loging.action';
 import {RootState} from '../../Redux/Reducers';
 import {Button as CustomButton, Link} from '../../Componet';
@@ -25,6 +20,7 @@ import * as Animatable from 'react-native-animatable';
 import {useTheme} from '@react-navigation/native';
 import {Image} from 'react-native-elements';
 import {Input} from 'react-native-elements';
+import {apiLogin, apiRegister} from '../../Global/API';
 
 type Props = StackScreenProps<LoginParam, 'SignUpScreen'>;
 
@@ -37,25 +33,31 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
   const {loginUser, errorLogin, isLogin}: LoginState = useSelector(
     (state: RootState) => state.loging,
   );
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
-  const [isValidUser, setIsvalidUser] = useState(true);
+  const [isValidFirstName, setIsValidFirstName] = useState(true);
+  const [isValidLastName, setIsvalidUser] = useState(true);
+  const [isValidUser, setIsValidLastName] = useState(true);
   const [isValidEmail, setIsvalidEmail] = useState(true);
   const [isValidPassword, setIsValidPassword] = useState(true);
+  const [isValidRePassword, setIsValidRePassword] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const onlogin = async (username: string, password: string) => {
     const data = await apiLogin(username, password);
-
-    if (data.access_token) {
+    if (data.data !== undefined) {
+      const reqData = data.data;
       const userLogin: LogingModel = {
         userId: '1',
-        username: data.username,
-        token: data.access_token,
-        role: data.roles,
+        username: username,
+        access_token: reqData.access_token,
+        refresh_token: reqData.access_token,
+        role: '',
       };
       const saveDataToLocal = await saveLocalStorage(userLogin);
 
@@ -65,8 +67,8 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
         clearLocalStorage();
       }
     }
-    if (data.error_description) {
-      dispatch(errorLoging({message: data.error_description}));
+    if (data.message) {
+      dispatch(errorLoging({message: data.message}));
     } else {
       if (data.error) {
         dispatch(errorLoging(data.error));
@@ -77,9 +79,13 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
     setLoading(true);
 
     if (
+      firstName.trimEnd() == '' ||
+      lastName.trimEnd() == '' ||
       email == '' ||
-      username == '' ||
+      username.trimEnd() == '' ||
       password == '' ||
+      !isValidFirstName ||
+      !isValidLastName ||
       !isValidEmail ||
       !isValidPassword ||
       !isValidUser
@@ -87,16 +93,46 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
       dispatch(errorLoging({message: 'Not valid data request'}));
       setLoading(false);
     } else {
-      dispatch(errorLoging(undefined));
-      await onlogin(username, password);
-      setLoading(true);
+      const regUser = await apiRegister({
+        code: 'MEMBER',
+        firstname: firstName,
+        lastname: lastName,
+        username: username,
+        email: email,
+        password: password,
+        type: 'silver',
+      });
+      if (regUser.data !== undefined) {
+        dispatch(errorLoging(undefined));
+        // await onlogin(username, password);
+        alert('Success to Register User');
+        setLoading(false);
+        navigation.navigate('SignInScreen');
+      } else {
+        dispatch(errorLoging({message: 'Not valid data request'}));
+        setLoading(false);
+      }
     }
   };
   const handleValidUser = (val: string) => {
-    if (val.trim().length >= 4) {
+    if (val.trim().length >= 3) {
       setIsvalidUser(true);
     } else {
       setIsvalidUser(false);
+    }
+  };
+  const handleValidFirstName = (val: string) => {
+    if (val.trim().length >= 3) {
+      setIsValidFirstName(true);
+    } else {
+      setIsValidFirstName(false);
+    }
+  };
+  const handleValidLastName = (val: string) => {
+    if (val.trim().length >= 3) {
+      setIsValidLastName(true);
+    } else {
+      setIsValidLastName(false);
     }
   };
   const handleValidEmail = (val: string) => {
@@ -108,10 +144,17 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
     }
   };
   const handleValidPassword = (val: string) => {
-    if (password === val) {
+    if (val.trim().length >= 6) {
       setIsValidPassword(true);
     } else {
       setIsValidPassword(false);
+    }
+  };
+  const handleValidRePassword = (val: string) => {
+    if (password === val) {
+      setIsValidRePassword(true);
+    } else {
+      setIsValidRePassword(false);
     }
   };
   const LoadingIndicator = () => {
@@ -166,6 +209,24 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
           <ScrollView horizontal={false} centerContent={true}>
             <View style={{flex: 1, width: (width * 3) / 4}}>
               <Input
+                placeholder="First Name"
+                leftIcon={{type: 'ionicon', name: 'person-outline'}}
+                onChangeText={value => setFirstName(value)}
+                onEndEditing={e => handleValidFirstName(e.nativeEvent.text)}
+                errorMessage={
+                  !isValidUser ? 'First Name must be 3 characters long' : ''
+                }
+              />
+              <Input
+                placeholder="Last Name"
+                leftIcon={{type: 'ionicon', name: 'person-add-outline'}}
+                onChangeText={value => setLastName(value)}
+                onEndEditing={e => handleValidLastName(e.nativeEvent.text)}
+                errorMessage={
+                  !isValidUser ? 'Last Name must be 3 characters long' : ''
+                }
+              />
+              <Input
                 placeholder="Email"
                 keyboardType="email-address"
                 leftIcon={{type: 'ionicon', name: 'mail-outline'}}
@@ -173,19 +234,19 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
                 onEndEditing={e => handleValidEmail(e.nativeEvent.text)}
                 errorMessage={!isValidEmail ? 'Enter valid Email address' : ''}
               />
-              <Input
+              {/* <Input
                 placeholder="Phone Number"
                 keyboardType="numeric"
                 leftIcon={{type: 'ionicon', name: 'call'}}
                 onChangeText={value => setPhoneNumber(value)}
-              />
+              /> */}
               <Input
                 placeholder="Username"
                 leftIcon={{type: 'ionicon', name: 'person-circle-outline'}}
                 onChangeText={value => setUsername(value)}
                 onEndEditing={e => handleValidUser(e.nativeEvent.text)}
                 errorMessage={
-                  !isValidUser ? 'Username must be 4 characters long' : ''
+                  !isValidUser ? 'Username must be 3 characters long' : ''
                 }
               />
 
@@ -208,15 +269,19 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
                         onPress: () => setSecurePassword(!securePassword),
                       }
                 }
-                onChangeText={value => setPassword(value)}
+                onChangeText={value => handleValidPassword(value)}
+                onEndEditing={e => handleValidPassword(e.nativeEvent.text)}
+                errorMessage={
+                  !isValidPassword ? 'Username must be 6 characters long' : ''
+                }
               />
               <Input
                 placeholder="Re Enter Password"
                 secureTextEntry={securePassword}
                 leftIcon={{type: 'ionicon', name: 'lock-closed-outline'}}
-                onChangeText={value => handleValidPassword(value)}
-                onEndEditing={e => handleValidPassword(e.nativeEvent.text)}
-                errorMessage={!isValidPassword ? 'Password not Match' : ''}
+                onChangeText={value => handleValidRePassword(value)}
+                onEndEditing={e => handleValidRePassword(e.nativeEvent.text)}
+                errorMessage={!isValidRePassword ? 'Password not Match' : ''}
               />
             </View>
           </ScrollView>

@@ -1,10 +1,21 @@
 export interface LogingModel {
   userId: string;
   username: string;
-  token: string;
+  access_token: string;
+  refresh_token: string;
+  cart_token: string;
   role: string;
 }
-
+export interface RegisterModel {
+  id?: string;
+  code: string;
+  firstname: string;
+  lastname: string;
+  username: string;
+  email: string;
+  password: string;
+  type: string;
+}
 export interface LoginState {
   loginUser: LogingModel | undefined;
   errorLogin: any | undefined;

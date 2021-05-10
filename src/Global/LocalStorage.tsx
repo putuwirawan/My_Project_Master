@@ -3,10 +3,13 @@ import {LogingModel} from '../Redux/Model';
 
 export const saveLocalStorage = async (user: LogingModel) => {
   let success: boolean = true;
+
   try {
     await AsyncStorage.setItem('userId', String(user.userId));
     await AsyncStorage.setItem('username', String(user.username));
-    await AsyncStorage.setItem('token', String(user.token));
+    await AsyncStorage.setItem('access_token', String(user.access_token));
+    await AsyncStorage.setItem('refresh_token', String(user.refresh_token));
+    await AsyncStorage.setItem('cart_token', String(user.cart_token));
     await AsyncStorage.setItem('role', String(user.role));
   } catch (e) {
     success = false;
@@ -18,7 +21,9 @@ export const clearLocalStorage = async () => {
   try {
     await AsyncStorage.removeItem('userId');
     await AsyncStorage.removeItem('username');
-    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('access_token');
+    await AsyncStorage.removeItem('refresh_token');
+    await AsyncStorage.removeItem('cart_token');
     await AsyncStorage.removeItem('role');
   } catch (e) {
     success = false;
@@ -30,9 +35,18 @@ export const getLocalStorage = async () => {
   try {
     const userId = await AsyncStorage.getItem('userId');
     const username = await AsyncStorage.getItem('username');
-    const token = await AsyncStorage.getItem('token');
+    const access_token = await AsyncStorage.getItem('access_token');
+    const refresh_token = await AsyncStorage.getItem('refresh_token');
+    const cart_token = await AsyncStorage.getItem('cart_token');
     const role = await AsyncStorage.getItem('role');
-    data = {userId: userId, username: username, token: token, role: role};
+    data = {
+      userId: userId,
+      username: username,
+      access_token: access_token,
+      refresh_token: refresh_token,
+      cart_token: cart_token,
+      role: role,
+    };
   } catch (e) {
     data = {error: e};
   }

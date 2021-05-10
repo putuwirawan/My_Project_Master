@@ -5,7 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Image} from 'react-native-elements';
 // Screen List
 import {HomeScreen} from './Home.screen';
-import {ProductDetail} from '../Product/Product.detail';
+// import {ProductDetail} from '../Product/Product.detail';
 
 import {DashboardParam} from '../../../Redux/Model';
 import {Styles} from '../../../Global';

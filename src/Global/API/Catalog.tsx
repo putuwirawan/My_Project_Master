@@ -48,7 +48,7 @@ export const getCatalog = async (request: catalogType) => {
     })
 
     .catch(e => {
-      data = {error: e};
+      alert('Network not Available');
     });
   return data;
 };
@@ -75,7 +75,7 @@ export const getCatalogDetail = async ({
     })
 
     .catch(e => {
-      data = {error: e};
+      alert('Network not Available');
     });
   return data;
 };
@@ -95,7 +95,7 @@ export const getCatalogArticle = async (variantId: string) => {
     })
 
     .catch(e => {
-      data = {error: e};
+      alert('Network not Available');
     });
   return data;
 };

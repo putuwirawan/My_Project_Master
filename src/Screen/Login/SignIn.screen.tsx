@@ -4,12 +4,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {View, Text, Button, StyleSheet, Dimensions} from 'react-native';
 import {LogingModel, LoginParam, LoginState} from '../../Redux/Model';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  apiLogin,
-  clearLocalStorage,
-  saveLocalStorage,
-  Styles,
-} from '../../Global';
+import {clearLocalStorage, saveLocalStorage, Styles} from '../../Global';
 import {errorLoging, logIn} from '../../Redux/Actions/Loging.action';
 import {RootState} from '../../Redux/Reducers';
 import {Button as CustomButton, Link} from '../../Componet';
@@ -19,6 +14,7 @@ import {useTheme} from '@react-navigation/native';
 import {Image} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Input} from 'react-native-elements';
+import {apiLogin} from '../../Global/API';
 
 type Props = StackScreenProps<LoginParam, 'SignInScreen'>;
 
@@ -36,13 +32,15 @@ export const SignInScreen: FC<Props> = ({navigation}) => {
   const [securePassword, setSecurePassword] = useState(true);
   const onlogin = async (username: string, password: string) => {
     const data = await apiLogin(username, password);
-
-    if (data.access_token) {
+    if (data.data !== undefined) {
+      const reqData = data.data
       const userLogin: LogingModel = {
-        userId: '1',
-        username: data.username,
-        token: data.access_token,
-        role: data.roles,
+        userId: '',
+        username: username,
+        access_token: reqData.access_token,
+        refresh_token: reqData.access_token,
+        cart_token: '',
+        role: '',
       };
       const saveDataToLocal = await saveLocalStorage(userLogin);
 
@@ -52,8 +50,8 @@ export const SignInScreen: FC<Props> = ({navigation}) => {
         clearLocalStorage();
       }
     }
-    if (data.error_description) {
-      dispatch(errorLoging({message: data.error_description}));
+    if (data.message) {
+      dispatch(errorLoging({message: data.message}));
     } else {
       if (data.error) {
         dispatch(errorLoging(data.error));

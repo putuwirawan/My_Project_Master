@@ -13,5 +13,5 @@ export type LoginParam = {
     Chat: undefined;
     MainMenu:  undefined;
     Product:  undefined;
-    ProductDetail: {data:any} |undefined;
+    ProductDetail: {data:any} ;
   }

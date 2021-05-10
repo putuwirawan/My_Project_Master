@@ -5,6 +5,14 @@ export interface VariantType {
   smallThumbPath: string;
   colorCode: string;
   colorDescription: string;
+  styleId: string;
+  styleCode: string;
+  styleDescription: string;
+  styleCreatedDate: string;
+  variantId: string;
+  imagePath: string;
+  imageThumbPath: string;
+  imageSmallThumbPath: string;
 }
 export interface ArticleType {
   id: string;
@@ -16,14 +24,20 @@ export interface ArticleType {
   sizeCode: string;
   sizeDescription: string;
 }
+export interface PriceType {
+  priceDocument: string;
+  priceType: string;
+  price: string;
+
+}
 export interface ItemListType {
   articleId: string;
   warehouseId: string;
   code: string;
   description: string;
   stock: number;
-  normalPrice: string | null;
-  promoPrice: string | null;
+  normalPrice: PriceType | null;
+  promoPrice: PriceType | null;
   salesPrice: string | null;
   salesPriceDocument: string | null;
 }

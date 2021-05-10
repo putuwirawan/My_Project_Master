@@ -4,6 +4,7 @@ import {Button} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import {ProductScreen} from './Product.screen';
+import {ProductDetail} from './Product.detail';
 import {DashboardParam} from '../../../Redux/Model';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useTheme} from 'react-native-paper';
@@ -33,6 +34,7 @@ export const ProductStackScreen: FC = () => {
               onPress={() => navigation.navigate('Cart')}
             />
           ),
+
         })}
       />
     </Stack.Navigator>

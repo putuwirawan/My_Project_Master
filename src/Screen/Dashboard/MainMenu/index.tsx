@@ -34,7 +34,15 @@ export const MainMenuScreen: FC = () => {
         options={({navigation, route}) => ({
           headerShown: true,
           title: 'Detail Product ',
-
+          headerLeft: () => (
+            <Ionicons
+              name={'arrow-back-circle-outline'}
+              color={colors.text}
+              size={25}
+              style={{marginLeft: 10}}
+              onPress={() => navigation.navigate('Home')}
+            />
+          ),
           headerRight: () => (
             <View>
               <Ionicons
