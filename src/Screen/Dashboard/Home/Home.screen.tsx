@@ -81,24 +81,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
       <SafeAreaView>
         <ScrollView>
           <View style={{height: 190}}>
-            <Block safe>
-              {/* <ScrollView horizontal>
-                {datas.map((item, i) => {
-                  return (
-                    <ProductM
-                      key={i}
-                      data={item}
-                      promo={
-                        <Image
-                          source={require('../../../Assets/Images/freeOngkir.png')}
-                          style={{width: 30, height: 25, marginBottom: 5}}
-                        />
-                      }
-                    />
-                  );
-                })}      
-              </ScrollView> */}
-            </Block>
+            <Block safe></Block>
           </View>
           <View style={{height: 240, backgroundColor: 'blue'}}>
             <Block safe>
@@ -122,19 +105,6 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
                       );
                     })
                   : null}
-                {/* <ProductL
-                  onPress={() => navigation.navigate('ProductDetail')}
-                  data={{katul: 'ngacuh'}}
-                  promo={
-                    <Image
-                      source={require('../../../Assets/Images/freeOngkir.png')}
-                      style={{width: 30, height: 25, marginBottom: 5}}
-                    />
-                  }
-                />
-                <ProductL data={{katul: 'ngacuh'}} />
-                <ProductL data={{katul: 'ngacuh'}} />
-                <ProductL data={{katul: 'ngacuh'}} /> */}
               </ScrollView>
             </Block>
           </View>

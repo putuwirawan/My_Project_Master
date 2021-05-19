@@ -4,6 +4,7 @@ import {API_host} from './index';
 
 type cartType = {
   qty: number;
+  remarks?: string;
   currencyId: string;
   warehouseId: string;
   articleId: string;
@@ -35,7 +36,7 @@ export const createCart = async (cart: cartType) => {
       if (responJson.data.memberId !== undefined) {
         await AsyncStorage.setItem('userId', responJson.data.memberId);
       }
-      data =true
+      data = true;
     })
 
     .catch(e => {
@@ -44,6 +45,54 @@ export const createCart = async (cart: cartType) => {
 
   return data;
 };
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}
+export const getCart = async () => {
+  let data: any = null;
+  const getUserLogin = await getLocalStorage();
+  const {access_token, userId, cart_token} = getUserLogin;
+  const URL = `${API_host}sales/shopcart?memberId=${userId}&memberToken=${cart_token}`;
+
+  if (cart_token != null && userId != null) {
+    await fetch(URL, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    })
+      .then(response => response.json())
+      .then(responJson => {
+        data = responJson.data;
+      })
+
+      .catch(e => {
+        alert('Network not Available');
+      });
+  }
+
+  return data;
+};
+export const deletedCart = async (cartId: string) => {
+  let data: boolean = false;
+  const getUserLogin = await getLocalStorage();
+  const {access_token, userId, cart_token} = getUserLogin;
+  const URL = `${API_host}sales/shopcart/${cart_token}/${cartId}`;
+
+  await fetch(URL, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  })
+    .then(response => response.json())
+    .then(responJson => {
+      data = responJson.data.deleted;
+    })
+
+    .catch(e => {
+      alert('Network not Available');
+    });
+  return data;
+};

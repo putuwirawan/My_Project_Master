@@ -2,15 +2,14 @@ import React, {useEffect} from 'react';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {logIn} from '../Redux/Actions/Loging.action';
-import {LoginState, ThemeState} from '../Redux/Model';
+import {CartModel, LoginState, ThemeState} from '../Redux/Model';
 import {RootState} from '../Redux/Reducers';
 import {CustomDarkTheme, CustomDefaultTheme, getLocalStorage} from '../Global';
-
 import {NavigationContainer} from '@react-navigation/native';
 import {LoginStackScreen} from './Login';
-import {DashboardStackScreen} from './Dashboard/Drawer';
-import {Tabscreen} from './Dashboard/TabScreen';
 import {MainMenuScreen} from './Dashboard/MainMenu';
+import {getCart} from '../Global/API';
+import {addCart} from '../Redux/Actions/Cart.action';
 interface Props {}
 
 const Home: React.FC<Props> = () => {
@@ -31,8 +30,16 @@ const Home: React.FC<Props> = () => {
       dispatch(logIn(getUserLogin));
     }
   };
+  const getDataCart = async () => {
+    const cartss = await getCart();
+    if (cartss !== null) {
+      const newCarts: CartModel[] = cartss.shopcartDetails;
+      dispatch(addCart(newCarts));
+    }
+  };
   useEffect(() => {
     checkUser();
+    getDataCart();
     //do nothing
   }, [isDarkTheme, isLogin, loginUser]);
   return (

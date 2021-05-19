@@ -331,52 +331,7 @@ export const ProductD: FC<TProps> = props => {
               {itemLists.length > 0 ? itemLists[slectedStore].description : ''}{' '}
             </Text>
             <Text>Price : {CurrencyFormat(salesPrice)} </Text>
-            {/* <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignContent: 'center',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 120,
-                  marginHorizontal: 10,
-                  backgroundColor: 'yellow',
-                }}>
-                <TouchableOpacity>
-                  <Icon
-                    name="remove-circle-outline"
-                    type="ionIcon"
-                    size={25}
-                    onPress={() => {}}
-                  />
-                </TouchableOpacity>
-
-                <Input
-                  keyboardType="numeric"
-                  inputContainerStyle={{
-                    width: 120,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  placeholder="qty order"
-                  onChangeText={text => {
-                    let newValue = text.replace(/[^0-9]/g, '');
-                    setQtyOrder(Number(newValue));
-                  }}
-                  onEndEditing={e => handleQtyOrder(e.nativeEvent.text)}
-                  errorMessage={!isvalidQty ? 'Not Available' : ''}
-                  value={String(qtyOrder)}
-                />
-                <TouchableOpacity>
-                  <Icon
-                    name="add-circle-outline"
-                    type="ionicon"
-                    size={25}
-                    onPress={() => {}}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View> */}
+          
           </View>
           <View
             style={[
@@ -403,6 +358,7 @@ export const ProductD: FC<TProps> = props => {
                   currencyId: '43b11d95-a96c-4f30-8a95-34c33377efba',
                   warehouseId: itemLists[slectedStore].warehouseId,
                   articleId: itemLists[slectedStore].articleId,
+                  remarks:''
                 };
                 if (stock <= 0) {
                   alert('Out of Stock');

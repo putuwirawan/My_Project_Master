@@ -1,3 +1,5 @@
+import { CartModel } from "."
+
 export type LoginParam = {
     SplashScreen:  undefined;
     SignInScreen:  undefined;
@@ -9,7 +11,7 @@ export type LoginParam = {
     Home: undefined;
     User: undefined;
     Feed: undefined;
-    Cart: undefined;
+    Cart: {carts:CartModel[],count:number};
     Chat: undefined;
     MainMenu:  undefined;
     Product:  undefined;

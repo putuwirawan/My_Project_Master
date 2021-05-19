@@ -1,12 +1,16 @@
-import React from 'react';
-import {FC} from 'react';
+import React, {FC} from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {CartScreen} from './Cart.screen';
-import {DashboardParam} from '../../../Redux/Model';
+import {CartState, DashboardParam} from '../../../Redux/Model';
+import {RootState} from '../../../Redux/Reducers';
+import {useSelector} from 'react-redux';
 
 export const CartStackScreen: FC = () => {
   const Stack = createStackNavigator<DashboardParam>();
+  const {carts, cartsCount}: CartState = useSelector(
+    (state: RootState) => state.cart,
+  );
 
   return (
     <Stack.Navigator
@@ -19,6 +23,7 @@ export const CartStackScreen: FC = () => {
       <Stack.Screen
         name="Cart"
         component={CartScreen}
+        initialParams={{carts: carts, count: cartsCount}}
         options={{
           title: 'TROLI',
         }}
