@@ -8,6 +8,7 @@ import {CartState, DashboardParam, LoginState} from '../../../Redux/Model';
 import {useTheme} from 'react-native-paper';
 import {createStackNavigator} from '@react-navigation/stack';
 import {ProductDetail} from '../Product/Product.detail';
+import {CheckOut} from '../Cart/CheckOut.screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {View} from 'react-native';
 import {Badge} from 'react-native-elements';
@@ -65,6 +66,16 @@ export const MainMenuScreen: FC = () => {
               />
             </View>
           ),
+        })}
+      />
+         <Menu.Screen
+        name="CheckOut"
+        component={CheckOut}
+        options={({navigation, route}) => ({
+          headerShown: true,
+          title: 'Checkout Order ',
+
+
         })}
       />
     </Menu.Navigator>

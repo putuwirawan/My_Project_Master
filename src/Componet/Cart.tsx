@@ -56,7 +56,7 @@ export const Cart: FC<TProps> = props => {
         style={{
           flexDirection: 'row',
           backgroundColor: '#AFD6EC',
-          width: '90%',
+          width: '100%',
         }}>
         <Image
           source={{
@@ -75,10 +75,13 @@ export const Cart: FC<TProps> = props => {
             {CurrencyFormat(Number(data.latestArticleData.salesPrice))}
           </Text>
           <Text style={{fontSize: 10}}>
-            stock :{data.latestArticleData.stock}
+            Stock :{data.latestArticleData.stock}
           </Text>
           <Text style={{fontSize: 10}}>
-            weight :{data.latestArticleData.weight} gr
+            Weight :{data.latestArticleData.weight} gr
+          </Text>
+          <Text style={{fontSize: 10}}>
+           Total Weight :{data.totalWeight} gr
           </Text>
         </View>
       </View>
@@ -89,6 +92,7 @@ export const Cart: FC<TProps> = props => {
             fontSize: 12,
             color: '#943E3C',
             textAlign: 'left',
+            fontWeight:'bold'
           }}>
           Warehouse :{data.warehouseDescription}
         </Text>

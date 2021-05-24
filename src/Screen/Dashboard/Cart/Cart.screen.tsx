@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {FC} from 'react';
+import React, {useEffect, useState, FC} from 'react';
+
 import {StackScreenProps} from '@react-navigation/stack';
-import {View, Text, Button, ScrollView} from 'react-native';
-import {CartModel, CartState, DashboardParam} from '../../../Redux/Model';
+import {View, Text, Button, ScrollView, Alert} from 'react-native';
+import {CartState, DashboardParam} from '../../../Redux/Model';
 import {useDispatch, useSelector} from 'react-redux';
 import {logOut} from '../../../Redux/Actions/Loging.action';
 import {clearLocalStorage} from '../../../Global';
-import {deletedCart, getCart} from '../../../Global/API';
+import {checkOut, deletedCart} from '../../../Global/API';
 import {Cart} from '../../../Componet';
 import {Block} from 'galio-framework';
 import {CheckBox, Icon} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {addCart} from '../../../Redux/Actions/Cart.action';
+
 import {RootState} from '../../../Redux/Reducers';
 
 type Props = StackScreenProps<DashboardParam, 'Cart'>;
@@ -28,21 +28,31 @@ export const CartScreen: FC<Props> = ({navigation, route}) => {
   const {carts, cartsCount}: CartState = useSelector(
     (state: RootState) => state.cart,
   );
+  const handleDeletedCart = (item: any, index: number) => {
+    //function to make three option alert
+    Alert.alert(
+      //title
+      'Confirm Remove',
+      //body
+      ' Remove from Cart ?',
+      [
 
-  const getDataCart = async () => {
-    const cartss = await getCart();
-    if (cartss !== null) {
-      const newCarts: CartModel[] = cartss.shopcartDetails;
-      dispatch(addCart(newCarts));
-
-      if (cartCheck == []) {
-        carts.forEach(element => {
-          cartCheckLists.push(false);
-        });
-
-        setcartCheck(cartCheckLists);
-      }
-    }
+        {
+          text: 'Yes',
+          onPress: async () => {
+            let deleted: boolean = await deletedCart(item.id);
+            const newChecked = [...cartCheck];
+            newChecked.splice(index, 1);
+            setcartCheck(newChecked);
+          },
+        },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('OK Pressed'),
+        },
+      ],
+      {cancelable: true},
+    );
   };
 
   useEffect(() => {
@@ -67,8 +77,8 @@ export const CartScreen: FC<Props> = ({navigation, route}) => {
                     paddingVertical: 5,
                   }}>
                   <Block row fluid left>
-                    <Block center>
-                      <CheckBox
+                    <Block center width={40}>
+                      {/* <CheckBox
                         center
                         checked={cartCheck[index]}
                         onPress={() => {
@@ -76,18 +86,14 @@ export const CartScreen: FC<Props> = ({navigation, route}) => {
                           newChecked[index] = !newChecked[index];
                           setcartCheck(newChecked);
                         }}
-                      />
+                      /> */}
                       <Icon
                         name="trash"
                         type="ionicon"
                         size={20}
                         color="#943E3C"
-                        onPress={async () => {
-                          let deleted: boolean = await deletedCart(item.id);
-                          const newChecked = [...cartCheck];
-                          newChecked.splice(index, 1);             
-                          setcartCheck(newChecked);
-                        }}
+                        style={{marginHorizontal: 10}}
+                        onPress={() => handleDeletedCart(item, index)}
                       />
                     </Block>
 
@@ -101,8 +107,16 @@ export const CartScreen: FC<Props> = ({navigation, route}) => {
           ) : (
             <Text>Cart UnAvailable </Text>
           )}
-
-          <Button title="Logout" onPress={() => onlogout()} />
+          <Button
+            title="Check Out Now"
+            onPress={async () => {
+              const dataResponse = await checkOut();
+              if (dataResponse[1].length > 0) {
+                navigation.navigate('CheckOut', {data: dataResponse[1]});
+              }
+            }}
+          />
+          {/* <Button title="Logout" onPress={() => onlogout()} /> */}
         </View>
       </ScrollView>
     </SafeAreaView>

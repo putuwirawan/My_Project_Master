@@ -16,4 +16,5 @@ export type LoginParam = {
     MainMenu:  undefined;
     Product:  undefined;
     ProductDetail: {data:any} ;
+    CheckOut:{data:any}
   }

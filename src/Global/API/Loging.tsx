@@ -1,4 +1,5 @@
 import qs from 'qs';
+import { getLocalStorage } from '..';
 import {RegisterModel} from '../../Redux/Model';
 import {API_host} from './index';
 
@@ -38,6 +39,30 @@ export const apiRegister = async (regdata: RegisterModel) => {
     .then(response => response.json())
     .then(responJson => {
       data = responJson;
+    })
+
+    .catch(e => {
+      data = {error: e};
+    });
+  return data;
+};
+export const getUser = async () => {
+  let data: any = null;
+  const getUserLogin = await getLocalStorage();
+  const {access_token, userId,username, cart_token} = getUserLogin;
+  const URL = `${API_host}member/${username}`;
+  await fetch(URL, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }
+  })
+    .then(response => response.json())
+    .then(responJson => {
+      data = responJson;
+      console.log(data)
     })
 
     .catch(e => {

@@ -19,11 +19,11 @@ export const saveLocalStorage = async (user: LogingModel) => {
 export const clearLocalStorage = async () => {
   let success: boolean = true;
   try {
-    await AsyncStorage.removeItem('userId');
+    // await AsyncStorage.removeItem('userId');
     await AsyncStorage.removeItem('username');
     await AsyncStorage.removeItem('access_token');
     await AsyncStorage.removeItem('refresh_token');
-    await AsyncStorage.removeItem('cart_token');
+    // await AsyncStorage.removeItem('cart_token');
     await AsyncStorage.removeItem('role');
   } catch (e) {
     success = false;
