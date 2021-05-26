@@ -7,3 +7,4 @@ export * from './ProductM';
 export * from './ProductL';
 export * from './ProductD';
 export * from './SlidingImage';
+export * from './ShowMore';

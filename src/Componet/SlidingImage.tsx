@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {FC} from 'react';
+import React, {useState,FC} from 'react';
 import {Text, View, Dimensions, StyleSheet} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 interface TProps {

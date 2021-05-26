@@ -1,5 +1,5 @@
 import {API_host} from './index';
-type catalogType = {
+export type catalogType = {
   filter?: string;
   sortBy?: string;
   sortOrder?: 'ASC' | 'DESC';

@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
-import {FC, useState} from 'react';
+import React, {useEffect, FC, useState} from 'react';
+
 import {StackScreenProps} from '@react-navigation/stack';
-import {View, Text, Button, ScrollView} from 'react-native';
+import {View, Text, Button, ScrollView, StyleSheet, Alert} from 'react-native';
 import {DashboardParam} from '../../../Redux/Model';
 import {useDispatch} from 'react-redux';
 
@@ -16,9 +16,10 @@ import {
   ButtonIcon,
   ProductL,
   ProductM,
+  ShowMore,
 } from '../../../Componet';
 import {Block} from 'galio-framework';
-import {getCatalog} from '../../../Global/API';
+import {catalogType, getCatalog} from '../../../Global/API';
 
 const adidasLogo = require('../../../Assets/Images/adidas.png');
 const insghtLogo = require('../../../Assets/Images/insight.jpg');
@@ -29,9 +30,34 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
   const [textSearch, setSearch] = useState<string>('');
   const [datas, setDatas] = useState([]);
 
+  let dataOption: catalogType = {
+    flags: 1,
+    sortOrder: 'DESC',
+    pageIndex: 0,
+    pageSize: 20,
+    brands: '',
+    filter: textSearch,
+  };
   const getDataCatalog = async () => {
-    const data = await getCatalog({flags: 1, sortOrder: 'DESC'});
-    if (data !== null) setDatas(data);
+    const data = await getCatalog(dataOption);
+    if (data.length > 0) {
+      setDatas(data);
+    } else {
+      alert('Data not Found');
+    }
+  };
+  const getDataByBrand = async (brand: string) => {
+    dataOption.brands = '';
+    dataOption.filter = '';
+    const data = await getCatalog(dataOption);
+
+    if (data.length > 0) {
+      setDatas(data);
+
+      navigation.navigate('Product', {data: datas, title: brand});
+    } else {
+      Alert.alert('request data', 'Data not Found');
+    }
   };
   const onlogout = async () => {
     await clearLocalStorage();
@@ -42,19 +68,22 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
   };
   useEffect(() => {
     getDataCatalog();
-  }, []);
+  }, [textSearch]);
   return (
     <View style={[Styles.Container]}>
       <SafeAreaView style={{paddingVertical: 3, backgroundColor: '#5F6160'}}>
         <ScrollView horizontal>
           <ButtonIcon brandLogo={adidasLogo} backgroundColor="#B7B8B7" />
-          <ButtonIcon brandLogo={insghtLogo} backgroundColor="#EAEBEB" />
+          <ButtonIcon
+            brandLogo={insghtLogo}
+            backgroundColor="#EAEBEB"
+            onPress={() => {
+              getDataByBrand('Insight');
+            }}
+          />
           <ButtonIcon brandLogo={insghtLogo} />
           <ButtonIcon brandLogo={insghtLogo} />
           <ButtonIcon brandLogo={insghtLogo} />
-          <CustomButton title="kopi" width={100} />
-          <CustomButton title="kopi" width={100} />
-          <CustomButton title="kopi" width={100} />
         </ScrollView>
       </SafeAreaView>
       <Searchbar
@@ -105,6 +134,9 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
                       );
                     })
                   : null}
+                <View style={[styles.item]}>
+                  <ShowMore onPress={() => {}} />
+                </View>
               </ScrollView>
             </Block>
           </View>
@@ -121,13 +153,30 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
             style={{height: 100, backgroundColor: 'yellow', marginBottom: 70}}>
             <Button title="Logout" onPress={() => onlogout()} />
             <Divider />
-            <Button
-              title="Product"
-              onPress={() => navigation.navigate('Product')}
-            />
           </View>
         </ScrollView>
       </SafeAreaView>
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginVertical: 20,
+  },
+  item: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    width: 100,
+    height: 210,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  itemInvisible: {
+    backgroundColor: 'transparent',
+  },
+  itemText: {
+    color: '#fff',
+  },
+});

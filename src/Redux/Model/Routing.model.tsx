@@ -14,7 +14,7 @@ export type LoginParam = {
     Cart: {carts:CartModel[],count:number};
     Chat: undefined;
     MainMenu:  undefined;
-    Product:  undefined;
+    Product: {data:any,title?:string};
     ProductDetail: {data:any} ;
     CheckOut:{data:any}
   }

@@ -9,12 +9,13 @@ import {Value} from 'react-native-reanimated';
 import {
   ArticleType,
   ImageType,
-  ItemlistType,
+  initItemList,
+  ItemListType,
   VariantType,
 } from '../Redux/Model';
 interface DataType {
   articles: ArticleType[];
-  itemlists: ItemlistType[];
+  itemlists: ItemListType[];
   images: ImageType[];
   variants: VariantType[];
 }
@@ -25,22 +26,12 @@ interface TProps {
   data: any;
   promo?: React.ReactNode;
 }
-const initItemlist: ItemlistType = {
-  articleId: '',
-  warehouseId: '',
-  code: '',
-  description: '',
-  stock: 0,
-  normalPrice: null,
-  promoPrice: null,
-  salesPrice: null,
-  salesPriceDocument: null,
-};
+
 export const ProductL: FC<TProps> = props => {
   const {onPress, backgroundColor, data, promo, priceColor} = props;
   const {name, style} = data;
   const {styleId, variantId} = style[0];
-  const [itemLists, setItemLists] = useState(initItemlist);
+  const [itemLists, setItemLists] = useState(initItemList);
 
   let _image =
     'https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300';
@@ -64,8 +55,7 @@ export const ProductL: FC<TProps> = props => {
       style={{
         alignItems: 'center',
         justifyContent: 'flex-start',
-        marginVertical: 2,
-        marginLeft: 3,
+        margin: 2,
         backgroundColor: backgroundColor ? backgroundColor : '#69A9E1',
         borderRadius: 5,
       }}>
@@ -85,7 +75,7 @@ export const ProductL: FC<TProps> = props => {
             {LimitText(String(data.name), 35)}
           </Text>
         </View>
-        {normalPrice != null && normalPrice != salesPrice ? (
+        {normalPrice != null ? (
           <View
             style={{
               flexDirection: 'row',
