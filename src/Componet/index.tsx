@@ -8,3 +8,6 @@ export * from './ProductL';
 export * from './ProductD';
 export * from './SlidingImage';
 export * from './ShowMore';
+export * from './SlideAnimate';
+export * from './AutoScroll'
+export * from './Kanvas'

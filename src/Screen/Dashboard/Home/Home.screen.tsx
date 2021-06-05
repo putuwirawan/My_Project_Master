@@ -12,6 +12,7 @@ import {Divider, Image} from 'react-native-elements';
 import {Searchbar} from 'react-native-paper';
 
 import {
+  AutoScroll,
   Button as CustomButton,
   ButtonIcon,
   ProductL,
@@ -20,11 +21,29 @@ import {
 } from '../../../Componet';
 import {Block} from 'galio-framework';
 import {catalogType, getCatalog} from '../../../Global/API';
-
+import ImageViewer from 'react-native-image-zoom-viewer';
+import Albums from '../../../Global/Example/Albums';
 const adidasLogo = require('../../../Assets/Images/adidas.png');
 const insghtLogo = require('../../../Assets/Images/insight.jpg');
 type Props = StackScreenProps<DashboardParam, 'Home'>;
-
+const myImages = [
+  {id: 1, url: 'https://avatars2.githubusercontent.com/u/5'},
+  {id: 2, url: 'https://avatars2.githubusercontent.com/u/6'},
+  {id: 3, url: 'https://avatars2.githubusercontent.com/u/7974'},
+  {id: 4, url: 'https://avatars2.githubusercontent.com/u/7975'},
+  {id: 5, url: 'https://avatars2.githubusercontent.com/u/7973'},
+  {id: 6, url: 'https://avatars2.githubusercontent.com/u/7972'},
+  {id: 7, url: 'https://avatars2.githubusercontent.com/u/7971'},
+  {id: 8, url: 'https://avatars2.githubusercontent.com/u/7970'},
+  {id: 9, url: 'https://avatars2.githubusercontent.com/u/79709'},
+];
+const myImageNew = [
+  'https://avatars2.githubusercontent.com/u/5',
+  'https://avatars2.githubusercontent.com/u/79709',
+  'https://avatars2.githubusercontent.com/u/7970',
+  'https://avatars2.githubusercontent.com/u/7971',
+  'https://avatars2.githubusercontent.com/u/7971',
+];
 export const HomeScreen: FC<Props> = ({navigation}) => {
   const dispatch = useDispatch(); // to Access Action
   const [textSearch, setSearch] = useState<string>('');
@@ -91,26 +110,19 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
         onChangeText={updateSearch}
         value={textSearch}
         iconColor="#A6F5BC"
-        style={{
-          backgroundColor: '#2C312D',
-          height: 45,
-          paddingVertical: 5,
-          opacity: 5,
-        }}
-        inputStyle={{
-          backgroundColor: '#BBC3BD',
-          height: 35,
-          fontSize: 15,
-          padding: 2,
-          marginHorizontal: 5,
-          borderRadius: 15,
-        }}
+        style={styles.searchContainer}
+        inputStyle={styles.textSearch}
       />
 
       <SafeAreaView>
         <ScrollView>
-          <View style={{height: 190}}>
-            <Block safe></Block>
+          <View style={{height: 190, backgroundColor: '#191919'}}>
+            <AutoScroll
+              data={Albums}
+              imageMode="stretch"
+              autoScroll={true}
+              duration={6000}
+            />
           </View>
           <View style={{height: 240, backgroundColor: 'blue'}}>
             <Block safe>
@@ -178,5 +190,20 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: '#fff',
+  },
+  image: {height: 180, resizeMode: 'cover'},
+  textSearch: {
+    backgroundColor: '#BBC3BD',
+    height: 35,
+    fontSize: 15,
+    padding: 2,
+    marginHorizontal: 5,
+    borderRadius: 15,
+  },
+  searchContainer: {
+    backgroundColor: '#2C312D',
+    height: 45,
+    paddingVertical: 5,
+    opacity: 5,
   },
 });
