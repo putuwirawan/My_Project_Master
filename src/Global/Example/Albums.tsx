@@ -1,4 +1,12 @@
-const Albums = [
+export interface AlbumModel {
+  albumId: number;
+  id: number;
+  title: string;
+  url: string;
+  thumbnailUrl: string;
+}
+
+const Albums:AlbumModel[] = [
   {
     albumId: 1,
     id: 1,

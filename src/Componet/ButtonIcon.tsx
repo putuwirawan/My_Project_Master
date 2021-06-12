@@ -16,7 +16,7 @@ interface SearchProps {
 export const ButtonIcon: FC<SearchProps> = props => {
   const {onPress, height, width, brandLogo, backgroundColor} = props;
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={()=>onPress}>
       <View
         style={{
           backgroundColor: backgroundColor ? backgroundColor : '#4F5150',

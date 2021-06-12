@@ -1,4 +1,4 @@
-export * from './Button';
+export * from './CustomButton';
 export * from './Cart';
 export * from './Link';
 export * from './DrawerBotton';
@@ -9,5 +9,6 @@ export * from './ProductD';
 export * from './SlidingImage';
 export * from './ShowMore';
 export * from './SlideAnimate';
-export * from './AutoScroll'
-export * from './Kanvas'
+export * from './AutoScroll';
+export * from './Kanvas';
+export * from './BasePage';

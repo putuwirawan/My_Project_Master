@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clearLocalStorage, saveLocalStorage, Styles} from '../../Global';
 import {errorLoging, logIn} from '../../Redux/Actions/Loging.action';
 import {RootState} from '../../Redux/Reducers';
-import {Button as CustomButton, Link} from '../../Componet';
+import {Link} from '../../Componet';
 
 import * as Animatable from 'react-native-animatable';
 import {useTheme} from '@react-navigation/native';
@@ -32,8 +32,9 @@ export const SignInScreen: FC<Props> = ({navigation}) => {
   const [securePassword, setSecurePassword] = useState(true);
   const onlogin = async (username: string, password: string) => {
     const data = await apiLogin(username, password);
+
     if (data.data !== undefined) {
-      const reqData = data.data
+      const reqData = data.data;
       const userLogin: LogingModel = {
         userId: '',
         username: username,
@@ -126,7 +127,8 @@ export const SignInScreen: FC<Props> = ({navigation}) => {
               {errorLogin.message}
             </Text>
           ) : null}
-          <CustomButton
+          <Button onPress={() => onlogin(username, password)} title="Login" />
+          {/* <CustomButton
             onPress={() => onlogin(username, password)}
             title="Login"
             width={150}
@@ -136,7 +138,7 @@ export const SignInScreen: FC<Props> = ({navigation}) => {
             iconName="person-circle-outline"
             iconColor={colors.border}
             color={['#4DD081', '#1E703F', '#0F381F']}
-          />
+          /> */}
           <Text style={{alignContent: 'center'}}>
             Don't have an Account? Tray to{' '}
             {

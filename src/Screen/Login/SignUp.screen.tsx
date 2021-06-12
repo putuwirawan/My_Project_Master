@@ -15,7 +15,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clearLocalStorage, saveLocalStorage, Styles} from '../../Global';
 import {errorLoging, logIn} from '../../Redux/Actions/Loging.action';
 import {RootState} from '../../Redux/Reducers';
-import {Button as CustomButton, Link} from '../../Componet';
+import {CustomButton, Link} from '../../Componet';
 import * as Animatable from 'react-native-animatable';
 import {useTheme} from '@react-navigation/native';
 import {Image} from 'react-native-elements';
@@ -57,6 +57,7 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
         username: username,
         access_token: reqData.access_token,
         refresh_token: reqData.access_token,
+        cart_token:'',
         role: '',
       };
       const saveDataToLocal = await saveLocalStorage(userLogin);
@@ -293,7 +294,8 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
               </Text>
             ) : null}
             {loading ? LoadingIndicator() : null}
-            <CustomButton
+            <Button onPress={() => handleOnRegister()} title="Register" />
+            {/* <CustomButton
               onPress={() => handleOnRegister()}
               title="Register"
               width={150}
@@ -303,7 +305,7 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
               iconName="person-circle-outline"
               iconColor={colors.border}
               color={['#4DD081', '#1E703F', '#0F381F']}
-            />
+            /> */}
             <Text style={{alignContent: 'center'}}>
               Allready Have an Account? Go to{' '}
               {

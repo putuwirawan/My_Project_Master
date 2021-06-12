@@ -8,6 +8,7 @@ import {
   View,
   StyleSheet,
   Modal,
+  RefreshControl,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 // import {Block, Button} from 'galio-framework';
@@ -29,6 +30,8 @@ import {Block} from 'galio-framework';
 import {orderBy} from 'json-function';
 import {RootState} from '../Redux/Reducers';
 import {useSelector} from 'react-redux';
+import Albums, {AlbumModel} from '../Global/Example/Albums';
+import {SlideAnimate} from '.';
 interface DataType {
   name: string;
   style: any;
@@ -40,12 +43,11 @@ interface TProps {
   data: DataType;
   promo?: React.ReactNode;
 }
-
+const {width, height} = Dimensions.get('screen');
 export const ProductD: FC<TProps> = props => {
   const {onPress, backgroundColor, data, promo, priceColor} = props;
   const {name, style} = data;
-  const {width} = Dimensions.get('screen');
-  const {height} = Dimensions.get('screen');
+  const [refreshing, setRefreshing] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [slectedVariant, setSelectedVariant] = useState<number>(0);
   const [slectedarticle, setSelectedArticle] = useState<number>(0);
@@ -58,27 +60,18 @@ export const ProductD: FC<TProps> = props => {
   const [stock, setStock] = useState<number>(0);
   const [qtyOrder, setQtyOrder] = useState<number>(0);
   const [isvalidQty, setisvalidQty] = useState<boolean>(true);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<AlbumModel[]>(Albums);
   const imagess = [
     'https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300',
-    'https://source.unsplash.com/1024x768/?nature',
-    'https://source.unsplash.com/1024x768/?water',
-    'https://source.unsplash.com/1024x768/?girl',
-    'https://source.unsplash.com/1024x768/?sea',
-    'https://source.unsplash.com/1024x768/?moon',
-    'https://source.unsplash.com/1024x768/?tree', // Network image
+    'https://www.dailycameranews.com/wp-content/uploads/2018/08/nikon-z7-sample-image-6.jpg',
+    'https://buzz16.com/wp-content/uploads/2017/04/Reflection-Photography-Examples-13.jpeg',
+    'https://static.photocrowd.com/upl/63/cms.ze5PXRQBqmpzLEf40OrA-collection_cover.jpeg',
+    'https://kbob.github.io/images/sample-4.jpg',
+    'https://www.cameraegg.org/wp-content/uploads/2016/01/Nikon-D500-Sample-Images-2.jpg',
+    'https://www.watermark-image.com/watermarking-examples/pixabay.com-en-desert-flower-landscape-mountains-82403.jpg', // Network image
   ];
-  const {loginUser, errorLogin, isLogin}: LoginState = useSelector(
-    (state: RootState) => state.loging,
-  );
-  const handleQtyOrder = (qty: string) => {
-    if (stock < Number(qty)) {
-      setisvalidQty(false);
-    } else {
-      setisvalidQty(true);
-    }
-  };
-  let getDataDetail = async (styleId: string, variantId: string) => {
+
+  const getDataDetail = async (styleId: string, variantId: string) => {
     await getCatalogDetail({styleId: styleId, variantId: variantId})
       .then(async response => {
         let newArticle: any = orderBy(response.data.articles, 'sizeCode');
@@ -87,7 +80,7 @@ export const ProductD: FC<TProps> = props => {
           await response.data.images.map((item: any, j: number) => {
             newImages.push(item.path);
           });
-          setImages(newImages);
+          // setImages(newImages);
         }
 
         setArticles(newArticle);
@@ -107,6 +100,15 @@ export const ProductD: FC<TProps> = props => {
     }
     setStock(Number(itemLists[slectedStore].stock));
   };
+  const onRefreshPage = () => {
+    setRefreshing(true);
+    getDataDetail(
+      style[slectedVariant].styleId,
+      style[slectedVariant].variantId,
+    ).then(() => {
+      setRefreshing(false);
+    });
+  };
   useEffect(() => {
     getDataDetail(
       style[slectedVariant].styleId,
@@ -117,165 +119,128 @@ export const ProductD: FC<TProps> = props => {
     changePrice();
   }, [itemLists, slectedStore]);
   return (
-    <View>
+    <View style={{height, width}}>
       <SafeAreaView style={{marginBottom: 50, opacity: showModal ? 0.5 : 1}}>
-        <ScrollView>
-          <Block center fluid card>
-            <SlidingImage images={imagess} />
-
-            <View style={{width: '80%'}}>
-              <Text style={{fontSize: 14, paddingHorizontal: 2}}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefreshPage} />
+          }>
+          <View style={styles.container}>
+            <View style={styles.imageDiv}>
+              <SlidingImage images={imagess} imageWidth={width - 12} />
+            </View>
+            <View style={styles.titleDiv}>
+              <Text style={{fontSize: 17, paddingHorizontal: 2}}>
                 {LimitText(String(name), 90)}
               </Text>
             </View>
-            <View
-              style={{
-                width: 0.88 * width,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: 20,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  paddingHorizontal: 2,
-                  justifyContent: 'space-between',
-                }}>
+            <View style={styles.priceDiv}>
+              <View style={styles.discountDiv}>
                 <View>
-                  <View
-                    style={{
-                      flex: 1,
-                      backgroundColor: '#F3D0DA',
-                      borderRadius: 5,
-
-                      alignContent: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Text style={{fontSize: 11, color: '#691A31'}}>44%</Text>
+                  <View style={styles.discountBox}>
+                    <Text style={{fontSize: 17, color: '#691A31'}}>44%</Text>
                   </View>
                 </View>
-                <Text
-                  style={{
-                    textDecorationLine: 'line-through',
-                    color: '#8C2341',
-                    fontStyle: 'italic',
-                    fontSize: 13,
-                    marginLeft: 10,
-                  }}>
+                <Text style={styles.textDiscount}>
                   {CurrencyFormat(600000)}
                 </Text>
               </View>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontWeight: '700',
-                    color: priceColor ? priceColor : '#040B12',
-                  }}>
+                <Text style={styles.textPrice}>
                   {CurrencyFormat(Number(salesPrice))}
                 </Text>
               </View>
             </View>
-          </Block>
+            <View
+              style={{
+                height: 150,
 
-          <View
-            style={{
-              height: 150,
-
-              marginVertical: 5,
-              paddingHorizontal: 10,
-            }}>
-            <View style={{flexDirection: 'row'}}>
-              {data.style.map((item: VariantType, index: number) => {
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      borderWidth: slectedVariant == index ? 1 : 0,
-                      borderColor: 'blue',
-                      marginLeft: 5,
-                      alignItems: 'center',
-                      opacity: slectedVariant == index ? 1 : 0.8,
-                    }}>
-                    <Image
-                      source={{
-                        uri: 'https://source.unsplash.com/1024x768/?tree',
-                      }}
-                      containerStyle={{
-                        width: 50,
-                        height: 50,
-                      }}
-                      onPress={() => {
-                        setSelectedVariant(index);
-                      }}
-                    />
-                    <Text style={{fontSize: 11, textAlign: 'center'}}>
-                      {item.variantCode.split(`${item.styleCode}-`)}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-            <View>
-              <Text>Stock : {stock}</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <Text>Size : </Text>
-              {articles.map((article, i) => {
-                return (
-                  <TouchableOpacity
-                    key={i}
-                    style={{marginHorizontal: 5}}
-                    onPress={() => setSelectedArticle(i)}>
+                marginVertical: 5,
+                paddingHorizontal: 10,
+              }}>
+              <View style={styles.varianDiv}>
+                {data.style.map((item: VariantType, index: number) => {
+                  return (
                     <View
-                      style={{
-                        backgroundColor:
-                          slectedarticle == i ? '#509EBF' : '#A4CDC9',
-                        borderRadius: 5,
-                        paddingHorizontal: 5,
-                      }}>
-                      <Text style={styles.description}>
-                        {article.sizeDescription}
+                      key={index}
+                      style={[
+                        styles.thumImageDiv,
+                        {
+                          borderWidth: slectedVariant === index ? 1 : 0,
+                          opacity: slectedVariant === index ? 1 : 0.6,
+                        },
+                      ]}>
+                      <Image
+                        source={{
+                          // uri: item.imageThumbPath,
+                          uri: 'https://source.unsplash.com/1024x768/?tree',
+                        }}
+                        containerStyle={styles.imageThum}
+                        onPress={() => {
+                          setSelectedVariant(index);
+                        }}
+                      />
+                      <Text style={{fontSize: 11, textAlign: 'center'}}>
+                        {item.variantCode.split(`${item.styleCode}-`)}
                       </Text>
                     </View>
-                  </TouchableOpacity>
-                );
-              })}
+                  );
+                })}
+              </View>
+              <View>
+                <Text>Stock : {stock}</Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <Text>Size : </Text>
+                {articles.map((article, i) => {
+                  return (
+                    <TouchableOpacity
+                      key={i}
+                      style={{marginHorizontal: 5}}
+                      onPress={() => setSelectedArticle(i)}>
+                      <View
+                        style={{
+                          backgroundColor:
+                            slectedarticle == i ? '#509EBF' : '#A4CDC9',
+                          borderRadius: 5,
+                          paddingHorizontal: 5,
+                        }}>
+                        <Text style={styles.description}>
+                          {article.sizeDescription}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+              <View style={[Styles.ContentRow, Styles.center]}>
+                <Text>Store Location :</Text>
+                <Picker
+                  style={styles.piker}
+                  mode="dropdown"
+                  selectedValue={slectedStore}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setSelectedStore(itemIndex);
+                  }}>
+                  {itemLists.length > 0
+                    ? itemLists.map((item, index) => {
+                        return (
+                          <Picker.Item
+                            key={index}
+                            label={item.description}
+                            value={item.warehouseId}
+                            style={styles.pikerItem}
+                          />
+                        );
+                      })
+                    : null}
+                </Picker>
+              </View>
             </View>
-            <View style={[Styles.ContentRow, Styles.center]}>
-              <Text>Store Location :</Text>
-              <Picker
-                style={{
-                  width: '60%',
-                  borderWidth: 1,
-                  borderRadius: 5,
-                  paddingTop: 5,
-                }}
-                mode="dropdown"
-                selectedValue={slectedStore}
-                onValueChange={(itemValue, itemIndex) => {
-                  setSelectedStore(itemIndex);
-                }}>
-                {itemLists.length > 0
-                  ? itemLists.map((item, index) => {
-                      return (
-                        <Picker.Item
-                          key={index}
-                          label={item.description}
-                          value={item.warehouseId}
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 'bold',
-                            color: '#1A3946',
-                          }}
-                        />
-                      );
-                    })
-                  : null}
-              </Picker>
+            <View style={{height: 200, width: '100%', backgroundColor: 'red'}}>
+              <Text>Kopi</Text>
             </View>
           </View>
-          <View style={{height: 100, backgroundColor: 'grey'}}></View>
         </ScrollView>
       </SafeAreaView>
 
@@ -285,21 +250,28 @@ export const ProductD: FC<TProps> = props => {
             setShowModal(true);
           }}
           title=" Add to Cart"
-          icon={{name: 'cart', type: 'ionicon', size: 14}}
+          icon={{name: 'cart', type: 'ionicon', size: 22, color: '#9AF9D0'}}
+          buttonStyle={[styles.button, {backgroundColor: '#09A64D'}]}
         />
 
         <Button
           onPress={() => {}}
           title="Pay Now"
-          icon={{name: 'receipt-outline', type: 'ionicon', size: 14}}
+          icon={{
+            name: 'receipt-outline',
+            type: 'ionicon',
+            size: 22,
+            color: '#89ED15',
+          }}
+          buttonStyle={[styles.button, {backgroundColor: '#DE9413'}]}
         />
       </View>
       <Modal
         animationType="slide"
         transparent
         visible={showModal}
-        style={{height: '70%', backgroundColor: 'yellow'}}>
-        <View style={{backgroundColor: '#E5EEEE', height: '50%', padding: 5}}>
+       >
+        <View style={{backgroundColor: '#97B4FA', height: '60%', padding: 5}}>
           <Block center fluid card>
             <Image
               source={{
@@ -331,7 +303,6 @@ export const ProductD: FC<TProps> = props => {
               {itemLists.length > 0 ? itemLists[slectedStore].description : ''}{' '}
             </Text>
             <Text>Price : {CurrencyFormat(salesPrice)} </Text>
-          
           </View>
           <View
             style={[
@@ -339,7 +310,7 @@ export const ProductD: FC<TProps> = props => {
               {
                 justifyContent: 'space-between',
                 position: 'absolute',
-                bottom: 0,
+                bottom:10,
                 width: '100%',
                 paddingHorizontal: 10,
               },
@@ -350,6 +321,8 @@ export const ProductD: FC<TProps> = props => {
                 backgroundColor: '#41AA1E',
                 borderRadius: 20,
                 height: 30,
+                borderWidth:2,
+                borderColor:'red'
               }}
               icon={{name: 'cart', type: 'ionicon', size: 20, color: '#6C1A74'}}
               onPress={async () => {
@@ -358,7 +331,7 @@ export const ProductD: FC<TProps> = props => {
                   currencyId: '43b11d95-a96c-4f30-8a95-34c33377efba',
                   warehouseId: itemLists[slectedStore].warehouseId,
                   articleId: itemLists[slectedStore].articleId,
-                  remarks:''
+                  remarks: '',
                 };
                 if (stock <= 0) {
                   alert('Out of Stock');
@@ -398,16 +371,104 @@ export const ProductD: FC<TProps> = props => {
 };
 
 const styles = StyleSheet.create({
-  bottomContent: {
-    position: 'absolute',
-    bottom: 0,
-    height: '10%',
-    width: '100%',
-    paddingHorizontal: 5,
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    alignItems: 'center',
+  container: {
+    width: width - 10,
     marginHorizontal: 5,
   },
+  bottomContent: {
+    position: 'absolute',
+    top: height - 130,
+    height: 50,
+    width: width,
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    alignContent: 'center',
+    padding: 3,
+    elevation: 1,
+  },
+  priceDiv: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 5,
+    backgroundColor: '#4C25E6',
+  },
+  discountDiv: {
+    flexDirection: 'row',
+    paddingHorizontal: 2,
+    justifyContent: 'space-between',
+  },
+  discountBox: {
+    height: 38,
+    width: 40,
+    backgroundColor: '#F3D0DA',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    width: 138,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#03421F',
+
+    elevation: 5,
+    opacity: 0.8,
+  },
   description: {fontSize: 12, fontStyle: 'italic'},
+  imageDiv: {
+    height: 230,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#1E1111',
+  },
+  titleDiv: {width: '100%', padding: 10},
+  piker: {
+    width: '60%',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingTop: 5,
+  },
+  pikerItem: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#1A3946',
+  },
+  thumImageDiv: {
+    borderColor: 'blue',
+    marginLeft: 5,
+    alignItems: 'center',
+  },
+  imageThum: {
+    width: 50,
+    height: 50,
+    borderRadius: 5,
+  },
+  textDiscount: {
+    textDecorationLine: 'line-through',
+    color: '#E45454',
+    fontStyle: 'italic',
+    fontSize: 15,
+    textShadowColor: '#000',
+    shadowOffset: {width: 0.8, height: 0.8},
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 3,
+    marginLeft: 10,
+  },
+  textPrice: {
+    color: 'white',
+    fontSize: 22,
+    fontWeight: 'bold',
+    textShadowColor: '#000',
+    shadowOffset: {width: 0.8, height: 0.8},
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 5,
+    marginBottom: 5,
+  },
+  varianDiv: {flexDirection: 'row'},
 });

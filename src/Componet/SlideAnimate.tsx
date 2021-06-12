@@ -26,9 +26,9 @@ interface TProps {
   speedChange?: number;
 }
 
-export const SlideAnimate: FC<TProps> = props => {
-  const {data, imageMode, auto, duration, speedChange} = props;
+export const SlideAnimate: FC<TProps> = (props )=>{
 
+  const {data, imageMode, auto, duration, speedChange} = props;
   const animationRef = useRef(new Animated.Value(0));
   const [curentImage, setCurentImage] = useState(0);
   const [autoScroll, setAutoScroll] = useState(auto ? auto : false);

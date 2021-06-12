@@ -1,7 +1,15 @@
 import React, {useEffect, FC, useState} from 'react';
 
 import {StackScreenProps} from '@react-navigation/stack';
-import {View, Text, Button, ScrollView, StyleSheet, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  RefreshControl,
+} from 'react-native';
 import {DashboardParam} from '../../../Redux/Model';
 import {useDispatch} from 'react-redux';
 
@@ -48,6 +56,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
   const dispatch = useDispatch(); // to Access Action
   const [textSearch, setSearch] = useState<string>('');
   const [datas, setDatas] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   let dataOption: catalogType = {
     flags: 1,
@@ -56,6 +65,12 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
     pageSize: 20,
     brands: '',
     filter: textSearch,
+  };
+  const onRefreshPage = () => {
+    setRefreshing(true);
+    getDataCatalog().then(() => {
+      setRefreshing(false);
+    });
   };
   const getDataCatalog = async () => {
     const data = await getCatalog(dataOption);
@@ -115,7 +130,10 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
       />
 
       <SafeAreaView>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefreshPage} />
+          }>
           <View style={{height: 190, backgroundColor: '#191919'}}>
             <AutoScroll
               data={Albums}

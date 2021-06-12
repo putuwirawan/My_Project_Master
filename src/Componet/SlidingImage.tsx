@@ -1,56 +1,110 @@
-import React, {useState,FC} from 'react';
-import {Text, View, Dimensions, StyleSheet} from 'react-native';
+import React, {useState, FC, useRef} from 'react';
+import {
+  Text,
+  View,
+  Image,
+  Dimensions,
+  StyleSheet,
+  ScrollView,
+  ScrollViewPropsAndroid,
+  FlatList,
+  Animated,
+} from 'react-native';
+import Albums, {AlbumModel} from '../Global/Example/Albums';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import {event} from 'react-native-reanimated';
 interface TProps {
-  images?: string[];
+  images: string[];
+  imageWidth: number;
 }
-const {width} = Dimensions.get('window');
-const height = (width * 60) / 100;
+const {width, height} = Dimensions.get('screen');
 
 export const SlidingImage: FC<TProps> = props => {
-  const {images} = props;
+  const {images, imageWidth} = props;
+  let scrollref: any = useRef(new Animated.ValueXY());
   const [active, setActive] = useState(0);
+  const [imageList, setImageList] = useState(images);
 
+  const setSelectedIndex = (event: any) => {
+    const viewSize = event.nativeEvent.layoutMeasurement.width;
+    const contenOfset = event.nativeEvent.contentOffset.x;
+    const newSelected = Math.floor(contenOfset / viewSize);
+    setActive(newSelected);
+    scrollref.current.scrollToOffset({
+      animated: true,
+      offset: newSelected * viewSize,
+    });
+  };
   return (
     <View style={styles.container}>
-      <ImageViewer
-        style={styles.image}
-        onChange={i => {
-          if (i !== undefined) setActive(i);
+      <FlatList
+        ref={scrollref}
+        data={imageList}
+        pagingEnabled
+        initialNumToRender={7}
+        scrollEventThrottle={7}
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        renderItem={({item, index}) => {
+          return (
+            <View>
+              <Image
+                source={{uri: item}}
+                style={[styles.image, {width: imageWidth}]}
+              />
+            </View>
+          );
         }}
-        useNativeDriver={true}
-        backgroundColor="#626566"
-        imageUrls={
-          images ? images.map((item, i) => ({url: item})) : [{url: ''}]
-        }
+        keyExtractor={(item, index) => String(index)}
+        onMomentumScrollEnd={event => {
+          setSelectedIndex(event);
+        }}
       />
 
-      <View style={[styles.pagination]}>
-        {images
-          ? images.map((i, x) => (
-              <Text
-                key={x}
-                style={
-                  x == active ? styles.pagingActiveText : styles.pagingText
-                }>
-                ⬤
-              </Text>
-            ))
-          : null}
+      <View style={styles.pagination}>
+        {imageList?.map((_, i) => {
+          return (
+            <View
+              key={i}
+              style={active === i ? styles.circleActive : styles.circleBlank}
+            />
+          );
+        })}
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  container: {height: height, width: 0.9 * width, margin: 2},
+  container: {flex: 1},
   scroll: {height: height, width: 0.9 * width},
-  image: {height: height, width: 0.9 * width, resizeMode: 'cover'},
+  image: {height: '100%', resizeMode: 'stretch', borderTopLeftRadius:30,borderTopRightRadius:30},
   pagination: {
-    flexDirection: 'row',
     position: 'absolute',
-    bottom: 0,
-    alignSelf: 'center',
+    bottom: 15,
+    height: 10,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  pagingText: {fontSize: width / 25, color: '#9C9C9C', margin: 3},
-  pagingActiveText: {fontSize: width / 25, color: '#ED1E25', margin: 3},
+  circleBlank: {
+    height: 10,
+    width: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    opacity: 1,
+    marginHorizontal: 2,
+    borderColor: '#878D8E',
+  },
+  circleActive: {
+    height: 10,
+    width: 10,
+    borderWidth: 2,
+    borderRadius: 5,
+    opacity: 1,
+    marginHorizontal: 2,
+    borderColor: '#2C2FD4',
+    backgroundColor: '#D42C2C',
+  },
 });

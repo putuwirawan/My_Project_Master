@@ -1,5 +1,5 @@
-import React from 'react';
-import {FC} from 'react';
+import React,{FC} from 'react';
+
 import LinearGradient from 'react-native-linear-gradient';
 import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import {Icon} from 'react-native-elements';
@@ -7,7 +7,7 @@ import {Styles} from '../Global';
 import {useTheme} from '@react-navigation/native';
 
 interface ButtonxProps {
-  onPress?: () => void;
+  onPress: ()=>void;
   color?: string[];
   width?: number;
   hight?: number;
@@ -22,7 +22,7 @@ interface ButtonxProps {
   textStyle?: any;
   iconColor?: string;
 }
-export const Button: FC<ButtonxProps> = props => {
+export const CustomButton: FC<ButtonxProps> = props => {
   const {
     onPress,
     color,
@@ -41,7 +41,7 @@ export const Button: FC<ButtonxProps> = props => {
   } = props;
   const {colors} = useTheme();
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={()=>onPress}>
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 4}}

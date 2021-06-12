@@ -1,18 +1,19 @@
-import React from 'react';
-import {FC} from 'react';
+import React,{FC} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
 interface TProps {
   onPress?: () => void;
-  color?: string;
-  text?: string;
+  headerView?: React.ReactNode;
+  menuNavigate?: React.ReactNode;
+  mainDisplay?: React.ReactNode;
+ 
 }
 
-export const Link: FC<TProps> = props => {
-  const {onPress, color, text} = props;
+export const BasePage: FC<TProps> = props => {
+  const {onPress, headerView, menuNavigate,mainDisplay} = props;
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={()=>onPress}
       style={{alignItems: 'center', justifyContent: 'center', marginTop: 10}}>
       <Text>Ngacuh</Text>
     </TouchableOpacity>

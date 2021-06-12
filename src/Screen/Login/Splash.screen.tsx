@@ -1,12 +1,12 @@
-import React from 'react';
-import {FC} from 'react';
+import React, {FC} from 'react';
+
 import {StackScreenProps} from '@react-navigation/stack';
-import {View, Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions, Button} from 'react-native';
 import {LoginParam, ThemeState} from '../../Redux/Model';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../Redux/Reducers';
 
-import {Button as CustomButton} from '../../Componet';
+import {CustomButton} from '../../Componet';
 import {Styles} from '../../Global';
 import * as Animatable from 'react-native-animatable';
 import {useTheme} from '@react-navigation/native';
@@ -63,8 +63,13 @@ export const SplashScreen: FC<Props> = ({navigation}) => {
             ]}>
             Stay Connected With EveryOne !
           </Text>
-          <CustomButton
-            onPress={() => navigation.navigate('SignInScreen')}
+          <Button title='Login' onPress={()=>navigation.navigate('SignInScreen')}/>
+          {/* <CustomButton
+            onPress={() =>{ 
+alert('katulahne')
+console.log('KOPI')
+              // navigation.navigate('SignInScreen')
+            }}
             title="Login"
             width={150}
             textStyle={[Styles.SubTitleItalic, {textAlign: 'center'}]}
@@ -72,7 +77,7 @@ export const SplashScreen: FC<Props> = ({navigation}) => {
             iconRight
             iconColor={colors.border}
             color={['#4DD081', '#1E703F', '#0F381F']}
-          />
+          /> */}
         </Animatable.View>
       </View>
     </View>

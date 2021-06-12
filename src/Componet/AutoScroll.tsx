@@ -7,7 +7,7 @@ import {
   FlatList,
   Animated,
 } from 'react-native';
-import {Kanvas} from '.';
+import {Kanvas} from './Kanvas';
 
 import useInterval from '../Global/UseInterval';
 
@@ -51,7 +51,12 @@ export const AutoScroll: FC<TProps> = props => {
 
     setSelectedIndex(newCurentImage);
   };
-
+const renderItem =({item}:{item:any})=>(
+  <Kanvas
+    image={item}
+    imageMode={imageMode ? imageMode : 'stretch'}
+  />
+)
   if (data.length) {
     return (
       <View style={[styles.container]}>
@@ -62,18 +67,21 @@ export const AutoScroll: FC<TProps> = props => {
           scrollEnabled
           decelerationRate="fast"
           snapToAlignment="center"
-          scrollEventThrottle={15}
+          initialNumToRender={5}
+          scrollEventThrottle={5}
           showsHorizontalScrollIndicator={false}
           data={data}
           keyExtractor={(item, index) => String(index)}
-          renderItem={({item}) => {
-            return (
-              <Kanvas
-                image={item}
-                imageMode={imageMode ? imageMode : 'stretch'}
-              />
-            );
-          }}
+          renderItem={ renderItem
+          //   ({item}) => {
+          //   return (
+          //     <Kanvas
+          //       image={item}
+          //       imageMode={imageMode ? imageMode : 'stretch'}
+          //     />
+          //   );
+          // }
+        }
           onMomentumScrollEnd={event => {
             if (selectedIndex + 1 === imageList.length) {
               setSelectedIndex(0);
