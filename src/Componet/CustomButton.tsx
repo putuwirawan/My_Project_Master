@@ -1,98 +1,113 @@
-import React,{FC} from 'react';
-
+import React, {FC} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
-import {Icon} from 'react-native-elements';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {Styles} from '../Global';
 import {useTheme} from '@react-navigation/native';
-
 interface ButtonxProps {
-  onPress: ()=>void;
+  onPress: () => void;
   color?: string[];
   width?: number;
-  hight?: number;
-  iconName?: string;
-  title?: string;
-  iconSize?: number;
+  height?: number;
   radius?: number;
-  iconRight?: boolean;
-  iconLeft?: boolean;
-  iconType?: string;
-  iconBackgroundColor?: string;
+  radiusType?:
+    | 'topLeft'
+    | 'topRight'
+    | 'left'
+    | 'right'
+    | 'crosTopBottom'
+    | 'crosBottomTop'
+    | 'none'
+    | 'all';
+  title: string;
+  iconRight?: React.ReactElement;
+  iconLeft?: React.ReactElement;
   textStyle?: any;
-  iconColor?: string;
 }
 export const CustomButton: FC<ButtonxProps> = props => {
   const {
     onPress,
     color,
     width,
-    hight,
-    iconName,
-    iconType,
+    height,
     title,
-    iconSize,
-    radius,
     iconRight,
     iconLeft,
-    iconColor,
-    iconBackgroundColor,
     textStyle,
+    radius,
+    radiusType,
   } = props;
   const {colors} = useTheme();
+  let borderType = undefined;
+  switch (radiusType) {
+    case 'all':
+      borderType = {borderRadius: radius ? radius : 10};
+      break;
+    case 'topLeft':
+      borderType = {borderTopLeftRadius: radius ? radius : 10};
+      break;
+    case 'topRight':
+      borderType = {borderTopRightRadius: radius ? radius : 10};
+      break;
+    case 'right':
+      borderType = {
+        borderTopRightRadius: radius ? radius : 10,
+        borderBottomRightRadius: radius ? radius : 10,
+      };
+      break;
+    case 'left':
+      borderType = {
+        borderTopLeftRadius: radius ? radius : 10,
+        borderBottomLeftRadius: radius ? radius : 10,
+      };
+      break;
+    case 'crosBottomTop':
+      borderType = {
+        borderTopLeftRadius: radius ? radius : 10,
+        borderBottomRightRadius: radius ? radius : 10,
+      };
+      break;
+    case 'crosTopBottom':
+      borderType = {
+        borderBottomLeftRadius: radius ? radius : 10,
+        borderTopRightRadius: radius ? radius : 10,
+      };
+      break;
+    default:
+      borderType = undefined;
+  }
+
   return (
-    <TouchableOpacity onPress={()=>onPress}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={{marginVertical: 3, marginHorizontal: 5}}>
       <LinearGradient
         start={{x: 0, y: 0}}
-        end={{x: 1, y: 4}}
-        colors={color ? color : [colors.primary, '#80C0AB']}
+        end={{x: 2, y: 3}}
+        colors={color ? color : ['#2DAA31', '#E7F9E8', '#49CF4D']}
         style={[
           Styles.ContentRow,
-          width ? {width: width} : null,
-          hight ? {height: hight} : null,
-          radius ? {borderRadius: radius} : null,
-          {padding: 5},
+          {
+            paddingVertical: 5,
+            paddingHorizontal: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          borderType,
+          width ? {width: width} : undefined,
+          height ? {height: height} : undefined,
         ]}>
-        {iconLeft ? (
-          <View
-            style={[
-              Styles.center,
-              Styles.icon,
-              iconBackgroundColor
-                ? {backgroundColor: iconBackgroundColor}
-                : null,
-            ]}>
-            <Icon
-              name={iconName ? iconName : 'home-outline'}
-              type={iconType ? iconType : 'ionicon'}
-              color={iconColor ? iconColor : colors.border}
-              size={iconSize ? iconSize : 25}
-            />
-          </View>
-        ) : null}
+        {iconLeft ? iconLeft : null}
 
-        <View style={{flex: 5, paddingLeft: 10}}>
-          <Text style={[{color: colors.text}, textStyle ? textStyle : null]}>
+        <View style={{marginHorizontal: 10}}>
+          <Text
+            style={[
+              {color: colors.text},
+              textStyle ? textStyle : {fontSize: 15, fontWeight: 'bold'},
+            ]}>
             {title}
           </Text>
         </View>
-        {iconRight ? (
-          <View
-            style={[
-              Styles.center,
-              Styles.icon,
-              iconBackgroundColor
-                ? {backgroundColor: iconBackgroundColor}
-                : null,
-            ]}>
-            <Icon
-              name={iconName ? iconName : 'chevron-forward-outline'}
-              type={iconType ? iconType : 'ionicon'}
-              color={iconColor ? iconColor : colors.border}
-              size={iconSize ? iconSize : 25}
-            />
-          </View>
-        ) : null}
+        {iconRight ? iconRight : null}
       </LinearGradient>
     </TouchableOpacity>
   );

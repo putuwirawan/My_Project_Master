@@ -18,7 +18,7 @@ import {RootState} from '../../Redux/Reducers';
 import {CustomButton, Link} from '../../Componet';
 import * as Animatable from 'react-native-animatable';
 import {useTheme} from '@react-navigation/native';
-import {Image} from 'react-native-elements';
+import {Icon, Image} from 'react-native-elements';
 import {Input} from 'react-native-elements';
 import {apiLogin, apiRegister} from '../../Global/API';
 
@@ -57,7 +57,7 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
         username: username,
         access_token: reqData.access_token,
         refresh_token: reqData.access_token,
-        cart_token:'',
+        cart_token: '',
         role: '',
       };
       const saveDataToLocal = await saveLocalStorage(userLogin);
@@ -207,7 +207,10 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
             borderTopRightRadius: width / 4,
             justifyContent: 'center',
           }}>
-          <ScrollView horizontal={false} centerContent={true}>
+          <ScrollView
+            horizontal={false}
+            centerContent={true}
+            showsVerticalScrollIndicator={false}>
             <View style={{flex: 1, width: (width * 3) / 4}}>
               <Input
                 placeholder="First Name"
@@ -287,25 +290,40 @@ export const SignUpScreen: FC<Props> = ({navigation}) => {
             </View>
           </ScrollView>
 
-          <View style={{paddingTop: 5}}>
+          <View style={{paddingTop: 5, alignItems:'center'}} >
             {errorLogin ? (
               <Text style={{color: '#A33F3F', fontStyle: 'italic'}}>
                 {errorLogin.message}
               </Text>
             ) : null}
             {loading ? LoadingIndicator() : null}
-            <Button onPress={() => handleOnRegister()} title="Register" />
-            {/* <CustomButton
+          
+
+            <CustomButton
+              color={['#4DD081', '#1E703F', '#0F381F']}
               onPress={() => handleOnRegister()}
               title="Register"
               width={150}
-              textStyle={[Styles.SubTitleItalic, {textAlign: 'center'}]}
-              radius={40}
-              iconRight
-              iconName="person-circle-outline"
-              iconColor={colors.border}
-              color={['#4DD081', '#1E703F', '#0F381F']}
-            /> */}
+              radiusType="all"
+              height={30}
+              radius={20}
+              iconLeft={
+                <Icon
+                  name="person-circle-outline"
+                  type="ionicon"
+                  color="#517fa4"
+                  size={22}
+                />
+              }
+              iconRight={
+                <Icon
+                  name="chevron-forward"
+                  type="ionicon"
+                  color="#F2F1F3"
+                  size={20}
+                />
+              }
+            />
             <Text style={{alignContent: 'center'}}>
               Allready Have an Account? Go to{' '}
               {

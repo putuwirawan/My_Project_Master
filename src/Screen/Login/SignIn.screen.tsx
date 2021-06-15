@@ -7,12 +7,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clearLocalStorage, saveLocalStorage, Styles} from '../../Global';
 import {errorLoging, logIn} from '../../Redux/Actions/Loging.action';
 import {RootState} from '../../Redux/Reducers';
-import {Link} from '../../Componet';
+import {CustomButton, Link} from '../../Componet';
 
 import * as Animatable from 'react-native-animatable';
 import {useTheme} from '@react-navigation/native';
-import {Image} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {Image, Icon} from 'react-native-elements';
+
 import {Input} from 'react-native-elements';
 import {apiLogin} from '../../Global/API';
 
@@ -127,18 +127,30 @@ export const SignInScreen: FC<Props> = ({navigation}) => {
               {errorLogin.message}
             </Text>
           ) : null}
-          <Button onPress={() => onlogin(username, password)} title="Login" />
-          {/* <CustomButton
-            onPress={() => onlogin(username, password)}
+          {/* <Button onPress={() => onlogin(username, password)} title="Login" /> */}
+          <CustomButton
+           onPress={() => onlogin(username, password)}
+            radiusType="all"
+            height={30}
             title="Login"
-            width={150}
-            textStyle={[Styles.SubTitleItalic, {textAlign: 'center'}]}
-            radius={40}
-            iconRight
-            iconName="person-circle-outline"
-            iconColor={colors.border}
-            color={['#4DD081', '#1E703F', '#0F381F']}
-          /> */}
+            radius={20}
+            iconLeft={
+              <Icon
+                name="person-circle-outline"
+                type="ionicon"
+                color="#517fa4"
+                size={22}
+              />
+            }
+            iconRight={
+              <Icon
+                name="chevron-forward"
+                type="ionicon"
+                color="#517fa4"
+                size={20}
+              />
+            }
+          />
           <Text style={{alignContent: 'center'}}>
             Don't have an Account? Tray to{' '}
             {

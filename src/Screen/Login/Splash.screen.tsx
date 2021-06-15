@@ -10,7 +10,7 @@ import {CustomButton} from '../../Componet';
 import {Styles} from '../../Global';
 import * as Animatable from 'react-native-animatable';
 import {useTheme} from '@react-navigation/native';
-import {Image} from 'react-native-elements';
+import {Icon, Image} from 'react-native-elements';
 
 type Props = StackScreenProps<LoginParam, 'SplashScreen'>;
 
@@ -55,7 +55,7 @@ export const SplashScreen: FC<Props> = ({navigation}) => {
         <Animatable.View
           animation="slideInRight"
           duration={2000}
-          style={{alignItems: 'flex-end', paddingRight: 5, marginTop: 40}}>
+          style={{alignItems: 'flex-end', paddingRight: 10, marginTop: 30}}>
           <Text
             style={[
               Styles.SubTitleItalic,
@@ -63,21 +63,30 @@ export const SplashScreen: FC<Props> = ({navigation}) => {
             ]}>
             Stay Connected With EveryOne !
           </Text>
-          <Button title='Login' onPress={()=>navigation.navigate('SignInScreen')}/>
-          {/* <CustomButton
-            onPress={() =>{ 
-alert('katulahne')
-console.log('KOPI')
-              // navigation.navigate('SignInScreen')
-            }}
+
+          <CustomButton
+            onPress={() => navigation.navigate('SignInScreen')}
+            radiusType="crosBottomTop"
+            height={30}
             title="Login"
-            width={150}
-            textStyle={[Styles.SubTitleItalic, {textAlign: 'center'}]}
-            radius={40}
-            iconRight
-            iconColor={colors.border}
-            color={['#4DD081', '#1E703F', '#0F381F']}
-          /> */}
+            radius={20}
+            iconLeft={
+              <Icon
+                name="person-circle-outline"
+                type="ionicon"
+                color="#517fa4"
+                size={22}
+              />
+            }
+            iconRight={
+              <Icon
+                name="chevron-forward"
+                type="ionicon"
+                color="#517fa4"
+                size={20}
+              />
+            }
+          />
         </Animatable.View>
       </View>
     </View>
