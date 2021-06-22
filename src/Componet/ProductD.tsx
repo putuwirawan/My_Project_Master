@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {FC} from 'react';
+import React, {useEffect, useState, FC} from 'react';
+
 import {
   Dimensions,
   ScrollView,
@@ -11,33 +11,29 @@ import {
   RefreshControl,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-// import {Block, Button} from 'galio-framework';
-import {Button, Image} from 'react-native-elements';
+import {Button, Image, Icon} from 'react-native-elements';
 import {CurrencyFormat, LimitText, Styles} from '../Global';
 import {SlidingImage} from './SlidingImage';
 import {SafeAreaView} from 'react-native-safe-area-context';
-// import ImageResizer from 'react-native-image-resizer';
+
 import {
   ArticleType,
   ItemListType,
   VariantType,
   initItemList,
-  LoginState,
 } from '../Redux/Model';
 import {createCart, getCatalogDetail} from '../Global/API';
 
 import {Block} from 'galio-framework';
 import {orderBy} from 'json-function';
-import {RootState} from '../Redux/Reducers';
-import {useSelector} from 'react-redux';
 import Albums, {AlbumModel} from '../Global/Example/Albums';
-import {SlideAnimate} from '.';
+import {CustomButton, SlideAnimate} from './index';
+import LinearGradient from 'react-native-linear-gradient';
 interface DataType {
   name: string;
   style: any;
 }
 interface TProps {
-  onPress?: () => void;
   backgroundColor?: string;
   priceColor?: string;
   data: DataType;
@@ -45,7 +41,7 @@ interface TProps {
 }
 const {width, height} = Dimensions.get('screen');
 export const ProductD: FC<TProps> = props => {
-  const {onPress, backgroundColor, data, promo, priceColor} = props;
+  const {backgroundColor, data, promo, priceColor} = props;
   const {name, style} = data;
   const [refreshing, setRefreshing] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -120,7 +116,7 @@ export const ProductD: FC<TProps> = props => {
   }, [itemLists, slectedStore]);
   return (
     <View style={{height, width}}>
-      <SafeAreaView style={{marginBottom: 50, opacity: showModal ? 0.5 : 1}}>
+      <SafeAreaView style={{marginBottom: 50, opacity: showModal ? 0.4 : 1}}>
         <ScrollView
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefreshPage} />
@@ -134,7 +130,11 @@ export const ProductD: FC<TProps> = props => {
                 {LimitText(String(name), 90)}
               </Text>
             </View>
-            <View style={styles.priceDiv}>
+            <LinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#25F05F', '#518BCD']}
+              style={styles.priceDiv}>
               <View style={styles.discountDiv}>
                 <View>
                   <View style={styles.discountBox}>
@@ -150,7 +150,8 @@ export const ProductD: FC<TProps> = props => {
                   {CurrencyFormat(Number(salesPrice))}
                 </Text>
               </View>
-            </View>
+            </LinearGradient>
+
             <View
               style={{
                 height: 150,
@@ -237,7 +238,7 @@ export const ProductD: FC<TProps> = props => {
                 </Picker>
               </View>
             </View>
-            <View style={{height: 200, width: '100%', backgroundColor: 'red'}}>
+            <View style={{height: 200, width: '100%', backgroundColor: 'blue'}}>
               <Text>Kopi</Text>
             </View>
           </View>
@@ -245,45 +246,90 @@ export const ProductD: FC<TProps> = props => {
       </SafeAreaView>
 
       <View style={[styles.bottomContent]}>
-        <Button
+        <CustomButton
+          color={['#4B960E', '#A8F16C', '#6AD214']}
           onPress={() => {
             setShowModal(true);
           }}
           title=" Add to Cart"
-          icon={{name: 'cart', type: 'ionicon', size: 22, color: '#9AF9D0'}}
-          buttonStyle={[styles.button, {backgroundColor: '#09A64D'}]}
+          width={140}
+          radiusType="crosTopBottom"
+          height={30}
+          radius={20}
+          iconRight={
+            <Icon name="cart" type="ionicon" color="#2D5A08" size={20} />
+          }
         />
-
-        <Button
+        <CustomButton
+          color={['#F5D491', '#EBA823', '#D29314']}
           onPress={() => {}}
           title="Pay Now"
-          icon={{
-            name: 'receipt-outline',
-            type: 'ionicon',
-            size: 22,
-            color: '#89ED15',
-          }}
-          buttonStyle={[styles.button, {backgroundColor: '#DE9413'}]}
+          width={140}
+          radiusType="crosBottomTop"
+          height={30}
+          radius={20}
+          iconLeft={
+            <Icon
+              name="receipt-outline"
+              type="ionicon"
+              color="#517fa4"
+              size={22}
+            />
+          }
         />
       </View>
       <Modal
         animationType="slide"
         transparent
         visible={showModal}
-       >
-        <View style={{backgroundColor: '#97B4FA', height: '60%', padding: 5}}>
-          <Block center fluid card>
-            <Image
-              source={{
-                uri: 'https://source.unsplash.com/1024x768/?tree',
-              }}
-              containerStyle={{
-                width: 120,
-                height: 120,
-              }}
-            />
-            <Text style={{fontSize: 11}}>{name}</Text>
-          </Block>
+        style={{
+          height,
+          width,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingHorizontal: 10,
+        }}>
+        <View
+          style={{
+            backgroundColor: '#DBA0F2',
+            borderRadius: 10,
+            height: '70%',
+            width: width - 20,
+            paddingHorizontal: 10,
+            marginHorizontal: 10,
+            marginTop: 40,
+          }}>
+          <View
+            style={{
+              width: '100%',
+              height: 150,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 10,
+            }}>
+            <View
+              style={{
+                marginTop: 15,
+                padding: 5,
+                backgroundColor: '#3832AD',
+                borderWidth: 2,
+                borderRadius: 10,
+                borderColor:'#000',
+                height: '100%',
+              }}>
+              <Image
+                source={{
+                  uri: 'https://source.unsplash.com/1024x768/?tree',
+                }}
+                containerStyle={{
+                  width: 150,
+                  height: '100%',
+                  borderRadius: 10,
+                }}
+              />
+            </View>
+          </View>
+
           <View style={{marginVertical: 10}}>
             <Text>Available Stock: {stock} </Text>
             <Text>
@@ -310,7 +356,7 @@ export const ProductD: FC<TProps> = props => {
               {
                 justifyContent: 'space-between',
                 position: 'absolute',
-                bottom:10,
+                bottom: 10,
                 width: '100%',
                 paddingHorizontal: 10,
               },
@@ -321,8 +367,8 @@ export const ProductD: FC<TProps> = props => {
                 backgroundColor: '#41AA1E',
                 borderRadius: 20,
                 height: 30,
-                borderWidth:2,
-                borderColor:'red'
+                borderWidth: 2,
+                borderColor: 'red',
               }}
               icon={{name: 'cart', type: 'ionicon', size: 20, color: '#6C1A74'}}
               onPress={async () => {

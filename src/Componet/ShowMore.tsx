@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View,Image, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
 
 interface TProps {
@@ -17,14 +17,18 @@ export const ShowMore: FC<TProps> = props => {
       <View style={{alignItems: 'center', width: 100}}>
         <View
           style={{
-            borderWidth: 2,
+            borderWidth: 1,
             borderBottomWidth: 0,
-            width: 35,
-            borderTopStartRadius: 10,
-            backgroundColor: '#82EC9E',
+            width: 45,
+            height:45,
+            borderRadius: 45/2,
+            backgroundColor: '#000012',
             borderColor: '#E61111',
+            alignItems:'center',
+            justifyContent:'center'
           }}>
-          <Icon name="logo-youtube" type="ionicon" color="#791190" size={30} />
+            <Image source={require('../Assets/Images/logo.png')} style={{height:30,width:30}}/>
+          {/* <Icon name="logo-youtube" type="ionicon" color="#791190" size={30} /> */}
         </View>
 
         <View

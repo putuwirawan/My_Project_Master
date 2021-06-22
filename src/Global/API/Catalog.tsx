@@ -72,12 +72,13 @@ export const getCatalogDetail = async ({
     .then(response => response.json())
     .then(responJson => {
       data = responJson;
+     
     })
 
     .catch(e => {
       alert('Network not Available');
     });
-  return data;
+   return data;
 };
 export const getCatalogArticle = async (variantId: string) => {
   let data: any = null;

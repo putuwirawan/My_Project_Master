@@ -31,8 +31,8 @@ export const SignInScreen: FC<Props> = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
   const onlogin = async (username: string, password: string) => {
+    
     const data = await apiLogin(username, password);
-
     if (data.data !== undefined) {
       const reqData = data.data;
       const userLogin: LogingModel = {

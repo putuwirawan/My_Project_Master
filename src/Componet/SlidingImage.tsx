@@ -23,7 +23,7 @@ export const SlidingImage: FC<TProps> = props => {
   const {images, imageWidth} = props;
   let scrollref: any = useRef(new Animated.ValueXY());
   const [active, setActive] = useState(0);
-  const [imageList, setImageList] = useState(images);
+  const [imageList, setImageList] = useState(Albums);
 
   const setSelectedIndex = (event: any) => {
     const viewSize = event.nativeEvent.layoutMeasurement.width;
@@ -49,7 +49,7 @@ export const SlidingImage: FC<TProps> = props => {
           return (
             <View>
               <Image
-                source={{uri: item}}
+                source={{uri: item.url}}
                 style={[styles.image, {width: imageWidth}]}
               />
             </View>
@@ -62,7 +62,7 @@ export const SlidingImage: FC<TProps> = props => {
       />
 
       <View style={styles.pagination}>
-        {imageList?.map((_, i) => {
+        {imageList?.map((_:any, i:number) => {
           return (
             <View
               key={i}

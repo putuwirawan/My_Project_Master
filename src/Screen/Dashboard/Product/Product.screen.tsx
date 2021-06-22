@@ -28,6 +28,15 @@ export const ProductScreen: FC<Props> = ({navigation, route}) => {
   const [datas, setDatas] = useState(data);
   const [pageIndex, setPageIndex] = useState(0);
   const [textSearch, setSearch] = useState<string>('');
+
+  let dataOption: catalogType = {
+    flags: 1,
+    sortOrder: 'DESC',
+    pageIndex: 0,
+    pageSize: 20,
+    brands: '',
+    filter: textSearch,
+  };
   const onlogout = async () => {
     await clearLocalStorage();
     dispatch(logOut());
@@ -49,28 +58,27 @@ export const ProductScreen: FC<Props> = ({navigation, route}) => {
     }
     return data;
   };
-  let dataOption: catalogType = {
-    flags: 1,
-    sortOrder: 'DESC',
-    pageIndex: pageIndex,
-    pageSize: 20,
-    brands:'',
-    filter: textSearch,
-  };
+
   const getDataCatalog = async () => {
-    const data = await getCatalog(dataOption);
-    if (data.length > 0) {
-      setDatas(data);
-    } else {
-      alert('Data not Found');
-    }
+    await getCatalog(dataOption)
+      .then(res => {
+        if (res.length > 0) {
+          setDatas(data);
+        } else {
+          alert('Data not Found');
+        }
+      })
+      .catch(e => {
+        alert(e);
+      });
+
   };
 
   const renderItem = ({item}: {item: any}) => {
     if (item.empty === true) {
       return (
         <View style={[styles.item]}>
-          <ShowMore onPress={() => setPageIndex(pageIndex + 1)} />
+          <ShowMore onPress={() => {}} />
         </View>
       );
     }
@@ -93,7 +101,7 @@ export const ProductScreen: FC<Props> = ({navigation, route}) => {
 
   useEffect(() => {
     getDataCatalog();
-  }, [textSearch, pageIndex]);
+  }, [textSearch]);
   return (
     <View>
       <Searchbar
@@ -121,6 +129,10 @@ export const ProductScreen: FC<Props> = ({navigation, route}) => {
           <View style={{height: 440, backgroundColor: '#3F864E'}}>
             <ScrollView horizontal>
               <FlatList
+              initialNumToRender={10}
+              windowSize={5}
+              maxToRenderPerBatch={5}
+              updateCellsBatchingPeriod={50}
                 data={formatData(datas, numColumns)}
                 renderItem={renderItem}
                 keyExtractor={item => item.variantId}

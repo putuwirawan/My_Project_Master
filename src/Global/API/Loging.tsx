@@ -1,11 +1,11 @@
 import qs from 'qs';
-import { getLocalStorage } from '..';
+import {getLocalStorage} from '..';
 import {RegisterModel} from '../../Redux/Model';
 import {API_host} from './index';
 
 export const apiLogin = async (username: string, password: string) => {
   let data: any = null;
-  const URL = `${API_host}auth/login?type=MEMBER`;
+  const URL = `${API_host}auth/login?type=USER`;
   await fetch(URL, {
     method: 'POST',
     headers: {
@@ -49,7 +49,7 @@ export const apiRegister = async (regdata: RegisterModel) => {
 export const getUser = async () => {
   let data: any = null;
   const getUserLogin = await getLocalStorage();
-  const {access_token, userId,username, cart_token} = getUserLogin;
+  const {access_token, userId, username, cart_token} = getUserLogin;
   const URL = `${API_host}member/${username}`;
   await fetch(URL, {
     method: 'GET',
@@ -57,12 +57,11 @@ export const getUser = async () => {
       Authorization: `Bearer ${access_token}`,
       Accept: 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
-    }
+    },
   })
     .then(response => response.json())
     .then(responJson => {
       data = responJson;
-      console.log(data)
     })
 
     .catch(e => {
