@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import {API_host} from './index';
 export type catalogType = {
   filter?: string;
@@ -39,8 +40,11 @@ export const getCatalog = async (request: catalogType) => {
       if (responJson.data != []) {
         const keydatas = Object.keys(responJson.data);
         const resData = keydatas.map((item, i) => {
+          const name = item;
+          const style = responJson.data[item];
           return {name: item, style: responJson.data[item]};
         });
+
         data = resData;
       } else {
         data = responJson.data;
@@ -48,7 +52,7 @@ export const getCatalog = async (request: catalogType) => {
     })
 
     .catch(e => {
-      alert('Network not Available');
+      Alert.alert('','No Network Available');
     });
   return data;
 };
@@ -72,13 +76,12 @@ export const getCatalogDetail = async ({
     .then(response => response.json())
     .then(responJson => {
       data = responJson;
-     
     })
 
     .catch(e => {
       alert('Network not Available');
     });
-   return data;
+  return data;
 };
 export const getCatalogArticle = async (variantId: string) => {
   let data: any = null;

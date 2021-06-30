@@ -9,7 +9,7 @@ interface TProps {
  
 }
 
-export const BasePage: FC<TProps> = props => {
+export const Template: FC<TProps> = props => {
   const {onPress, headerView, menuNavigate,mainDisplay} = props;
   return (
     <TouchableOpacity

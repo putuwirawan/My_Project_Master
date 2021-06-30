@@ -1,7 +1,14 @@
-import React, {useEffect, FC, useState} from 'react';
+import React, {useEffect, FC, useState, useRef} from 'react';
 
 import {StackScreenProps} from '@react-navigation/stack';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  FlatList,
+  Alert,
+} from 'react-native';
 import {DashboardParam} from '../../../Redux/Model';
 
 import {Image} from 'react-native-elements';
@@ -16,19 +23,20 @@ import {
 
 import {catalogType, getCatalog} from '../../../Global/API';
 import Albums from '../../../Global/Example/Albums';
-import Brands from '../../../Global/Example/Brand';
+import Brands, {BrandModel} from '../../../Global/Example/Brand';
 
 type Props = StackScreenProps<DashboardParam, 'Home'>;
 
 export const HomeScreen: FC<Props> = ({navigation}) => {
   const [seachValue, setSeachValue] = useState('');
   const [datas, setDatas] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState('');
 
   let dataOption: catalogType = {
     flags: 1,
     sortOrder: 'DESC',
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 10,
     brands: '',
     filter: seachValue,
   };
@@ -36,11 +44,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
   const getDataCatalog = async () => {
     await getCatalog(dataOption)
       .then(res => {
-        if (res.length > 0) {
-          setDatas(res);
-        } else {
-          alert('data not found');
-        }
+        if (res !== null) setDatas(res);
       })
       .catch(e => {
         alert(e);
@@ -51,8 +55,24 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
     return (
       <BrandList
         data={Brands}
-        onSelec={(data: any, title: string) => {
-          navigation.navigate('Product', {data: data, title: title});
+        onSelec={(brand: BrandModel) => {
+          dataOption.brands = ''; //brand.deskription;
+          dataOption.filter = '';
+          dataOption.pageSize = 35;
+          getCatalog(dataOption)
+            .then(res => {
+              if (res != null) {
+                if (res.length > 0) {
+                  navigation.navigate('Product', {
+                    data: res,
+                    title: brand.deskription,
+                  });
+                } else Alert.alert('', 'Not Available Product');
+              }
+            })
+            .catch(e => {
+              alert(e);
+            });
         }}
       />
     );
@@ -69,56 +89,56 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
           />
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {datas.length > 0
-            ? datas.map((item, i) => {
-                return (
-                  <View key={i} style={[styles.item]}>
-                    <ProductL
-                      onPress={() =>
-                        navigation.navigate('ProductDetail', {data: item})
-                      }
-                      data={item}
-                      promo={
-                        <Image
-                          source={require('../../../Assets/Images/freeOngkir.png')}
-                          style={{width: 30, height: 25, marginBottom: 5}}
-                        />
-                      }
+          {datas.length > 0 ? (
+            datas.map((item, index) => (
+              <View key={index} style={[styles.item]}>
+                <ProductL
+                  onPress={() =>
+                    navigation.navigate('ProductDetail', {data: item})
+                  }
+                  data={item}
+                  promo={
+                    <Image
+                      source={require('../../../Assets/Images/freeOngkir.png')}
+                      style={{width: 30, height: 25, marginBottom: 5}}
                     />
-                  </View>
-                );
-              })
-            : null}
-          <View>
-            <ShowMore onPress={() => {}} />
-          </View>
-        </ScrollView>
-        <Text>Produck Terbaru :</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {datas.length > 0
-            ? datas.map((item, i) => {
-                return (
-                  <View key={i} style={[styles.item]}>
-                  <ProductL
-                    key={i}
-                    onPress={() =>
-                      navigation.navigate('ProductDetail', {data: item})
-                    }
-                    data={item}
-                    promo={
-                      <Image
-                        source={require('../../../Assets/Images/freeOngkir.png')}
-                        style={{width: 30, height: 25, marginBottom: 5}}
-                      />
-                    }
-                  />
-                  </View>
-                );
-              })
-            : null}
-          <View>
-            <ShowMore onPress={() => {}} />
-          </View>
+                  }
+                />
+              </View>
+            ))
+          ) : (
+            <View style={[styles.item]}>
+              <Image
+                source={require('../../../Assets/Images/EmptyIcon.png')}
+                style={{width: 50, height: 50, resizeMode: 'contain'}}
+              />
+              <Text>Data Not Available</Text>
+            </View>
+          )}
+          {datas.length > 0 ? (
+            <View style={[styles.item]}>
+              <ShowMore
+                onPress={async () => {
+                  dataOption.pageSize = 35;
+                  dataOption.filter = '';
+                  await getCatalog(dataOption)
+                    .then(res => {
+                      if (res.length > 0) {
+                        navigation.navigate('Product', {
+                          data: res,
+                          title: 'Planet Surf',
+                        });
+                      } else {
+                        alert('data not found');
+                      }
+                    })
+                    .catch(e => {
+                      alert(e);
+                    });
+                }}
+              />
+            </View>
+          ) : null}
         </ScrollView>
       </View>
     );
@@ -141,7 +161,6 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-
   item: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -151,5 +170,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
   },
-
 });

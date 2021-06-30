@@ -4,7 +4,7 @@ import {Text, View,Image, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
 
 interface TProps {
-  onPress?: Function;
+  onPress:()=>void;
   color?: string;
 }
 
@@ -12,7 +12,7 @@ export const ShowMore: FC<TProps> = props => {
   const {onPress, color} = props;
   return (
     <TouchableOpacity
-      onPress={onPress ? onPress() : () => {}}
+      onPress={onPress}
       style={{alignItems: 'center', justifyContent: 'center', marginTop: 10}}>
       <View style={{alignItems: 'center', width: 100}}>
         <View

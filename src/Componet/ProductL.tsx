@@ -46,8 +46,8 @@ export const ProductL: FC<TProps> = props => {
   const [imageView, setImage] = useState<ImageType>(initImage);
 
   let {normalPrice, promoPrice, salesPrice} = itemLists;
-
-  const getDetail = (styleId: string, variantId: string) => {
+  // styleId: string, variantId: string
+  const getDetail = () => {
     getCatalogDetail({
       styleId: styleId,
       variantId: variantId,
@@ -60,7 +60,7 @@ export const ProductL: FC<TProps> = props => {
   };
 
   useEffect(() => {
-    getDetail(styleId, variantId);
+    getDetail();
   }, []);
   return (
     <TouchableOpacity
