@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "578729706625",
+    "firebase_url": "https://wawanlahne-bf8c2.firebaseio.com",
+    "project_id": "wawanlahne-bf8c2",
+    "storage_bucket": "wawanlahne-bf8c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578729706625:android:13fd2aa2427787425b7980",
+        "android_client_info": {
+          "package_name": "com.myreduxts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578729706625-hu07v8pjcgefqp778tls9rnvkk5i5p1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfyt8pH3kmFwLexb1LSigo894dS4f6FXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578729706625-hu07v8pjcgefqp778tls9rnvkk5i5p1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578729706625:android:437bb1fc4e0ae9945b7980",
+        "android_client_info": {
+          "package_name": "com.pushnotif"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578729706625-hu07v8pjcgefqp778tls9rnvkk5i5p1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfyt8pH3kmFwLexb1LSigo894dS4f6FXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578729706625-hu07v8pjcgefqp778tls9rnvkk5i5p1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -27,7 +27,7 @@ export const ProductItem: FC<TProps> = props => {
         source={image}
         style={{width: 100, height: 100, resizeMode: 'contain'}}
       />
-      <Text>{data.title}</Text>
+      <Text>{data.name}</Text>
       <Text>{price}</Text>
     </View>
   );

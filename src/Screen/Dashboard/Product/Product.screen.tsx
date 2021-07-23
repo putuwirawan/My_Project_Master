@@ -33,8 +33,8 @@ export const ProductScreen: FC<Props> = ({navigation, route}) => {
     await getCatalog(dataOption)
       .then(res => {
         if (res.length > 0) {
-           //setDatas(res);
-           setDatas(Album2);
+           setDatas(res);
+           //setDatas(Album2);
         } else {
           alert('data not found');
         }

@@ -29,6 +29,7 @@ export const CustomSnackList: FC<TProps> = props => {
 
   const formatData = () => {
     let newData = data;
+
     newData.push({id: `showMore`, empty: false});
 
     const numberOfFullRows = Math.floor(newData.length / numColumns);
@@ -41,7 +42,9 @@ export const CustomSnackList: FC<TProps> = props => {
       newData.push({id: `blank-${numberOfElementsLastRow}`, empty: true});
       numberOfElementsLastRow++;
     }
-    return {resData: newData, numRow: numberOfFullRows + 1};
+    setDatas(newData);
+    setRow(numberOfFullRows + 1);
+    // return {resData: newData, numRow: numberOfFullRows + 1};
   };
 
   const renderItem = (datarender: any[]) => {
@@ -94,10 +97,10 @@ export const CustomSnackList: FC<TProps> = props => {
     );
   };
   useEffect(() => {
-    const newdata = formatData();
-    const {resData, numRow} = newdata;
-    setDatas(resData);
-    setRow(numRow);
+    formatData();
+    // const {resData, numRow} = newdata;
+    // setDatas(resData);
+    // setRow(numRow);
   }, []);
 
   return <ScrollView>{renderItem(datas)}</ScrollView>;

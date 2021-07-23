@@ -1,3 +1,23 @@
+import PushNotification from 'react-native-push-notification';
+
+export function LocalNotification({message, title,bigText}:{message:string,title:string,bigText?:string}) {
+
+  PushNotification.localNotification({
+    channelId: "channel-id",     
+    autoCancel: true,
+    bigText:
+    bigText?bigText:'',
+    subText: 'Planetsurf Info',
+    title: title,
+    message: message,
+    // vibrate: true,
+    // vibration: 300,
+    // playSound: true,
+    // soundName: 'default',
+    // actions: ['Yes', 'No'],
+  });
+}
+
 export function CurrencyFormat(num: number) {
   return 'Rp.' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
